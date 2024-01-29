@@ -2,9 +2,9 @@
 
 Team Members:
 
-1.
-2.
+1. Ainsley Fletcher
+2. Arthur Barbosa
 
-Java Version:
+Java Version: 17.0.3
 
 Comments / Descriptions:
