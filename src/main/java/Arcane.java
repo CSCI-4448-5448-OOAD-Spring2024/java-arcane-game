@@ -1,5 +1,6 @@
-public class Main {
-    public static void main(String[] args){
+public class Arcane {
+
+    public void runGame(){
 
         System.out.println("Starting play...");
         Game arcane = new Game();
@@ -10,5 +11,6 @@ public class Main {
         arcane.createMap();
         arcane.playGame();
         arcane.announceWinner();
+
     }
 }

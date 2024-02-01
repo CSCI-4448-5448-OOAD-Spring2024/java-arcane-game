@@ -16,6 +16,7 @@ public class Game {
         this.adventurer = null;
         this.creature = null;
     }
+
     public void setEntities(CharacterInterface adventurer, CharacterInterface creature){
 
         this.adventurer = adventurer;
