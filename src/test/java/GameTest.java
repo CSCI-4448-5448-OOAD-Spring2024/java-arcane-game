@@ -31,6 +31,7 @@ public class GameTest {
 
         assertEquals(4, testArcane.getRoomsInMap().size());
         assertTrue(winner.contains(testAdventurer.getName()) || winner.contains(testCreature.getName()));
+        assertTrue(testArcane.isGameOver());
 
     }
 }

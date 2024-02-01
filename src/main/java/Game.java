@@ -101,8 +101,8 @@ public class Game {
 
     public void fight() {
 
-        int adventurerDiceRoll = new Random().nextInt(6) + 1;
-        int creatureDiceRoll = new Random().nextInt(6) + 1;
+        int adventurerDiceRoll = diceRoll();
+        int creatureDiceRoll = diceRoll();
 
         if (!(adventurerDiceRoll == creatureDiceRoll)) {
 
@@ -137,6 +137,10 @@ public class Game {
         room.removeAdventurer();
         newRoom.setAdventurerPresent();
 
+    }
+
+    public int diceRoll(){
+        return new Random().nextInt(6) + 1;
     }
 
     public String announceWinner(){
