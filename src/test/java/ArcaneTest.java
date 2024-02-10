@@ -11,10 +11,8 @@ public class ArcaneTest {
     @Test
     public void testRunGame()
     {
-
         Arcane arcaneTest = new Arcane();
         arcaneTest.runGame();
         assertNotNull(arcaneTest);
-
     }
 }

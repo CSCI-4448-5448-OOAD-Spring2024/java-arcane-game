@@ -11,6 +11,5 @@ public class Arcane {
         arcane.createMap();
         arcane.playGame();
         arcane.announceWinner();
-
     }
 }
