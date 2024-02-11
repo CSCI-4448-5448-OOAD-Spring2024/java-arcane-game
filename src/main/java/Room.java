@@ -5,14 +5,14 @@ public class Room {
 
     private String name;
     private List<Room> neighboringRooms;
-    private boolean creaturePresent;
-    private boolean adventurerPresent;
+    private List<CharacterInterface> adventurers;
+    private List<CharacterInterface> creatures;
 
     public Room(String name) {
         this.name = name;
         this.neighboringRooms = new ArrayList<>();
-        this.adventurerPresent = false;
-        this.creaturePresent = false;
+        this.adventurers = new ArrayList<>();
+        this.creatures = new ArrayList<>();
     }
 
     public String getRoomName() {
@@ -28,25 +28,35 @@ public class Room {
         this.neighboringRooms.add(newNeighbor);
         newNeighbor.neighboringRooms.add(this);
     }
+    public void addAdventurer(CharacterInterface adventurer) {
+        adventurers.add(adventurer);
+    }
 
+    public void addCreature(CharacterInterface creature) {
+        creatures.add(creature);
+    }
+
+    public List<CharacterInterface> getAdventurers() {
+        return adventurers;
+    }
+
+    public List<CharacterInterface> getCreatures() {
+        return creatures;
+    }
     public boolean isAdventurerPresent() {
-        return adventurerPresent;
+        return !adventurers.isEmpty();
     }
 
     public boolean isCreaturePresent() {
-        return creaturePresent;
+        return !creatures.isEmpty();
     }
 
-    public void setAdventurerPresent() {
-        adventurerPresent = true;
+    public void removeAdventurer(CharacterInterface adventurer) {
+        adventurers.remove(adventurer);
     }
 
-    public void setCreaturePresent() {
-        creaturePresent = true;
-    }
-
-    public void removeAdventurer() {
-        adventurerPresent = false;
+    public void removeCreature(CharacterInterface creature) {
+        creatures.remove(creature);
     }
 
 }

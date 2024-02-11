@@ -12,8 +12,8 @@ public class RoomTest {
 
         assertEquals(testName, testRoom.getRoomName());
         assertEquals(0, testRoom.getNeighboringRooms().size());
-        assertFalse(testRoom.isAdventurerPresent());
-        assertFalse(testRoom.isCreaturePresent());
+        assertEquals(0, testRoom.getAdventurers().size());
+        assertEquals(0, testRoom.getCreatures().size());
     }
 
     @Test
@@ -33,12 +33,18 @@ public class RoomTest {
 
         Room testRoom = new Room("Test Room");
 
-        testRoom.setAdventurerPresent();
-        assertTrue(testRoom.isAdventurerPresent());
-        assertFalse(testRoom.isCreaturePresent());
-        testRoom.setCreaturePresent();
-        assertTrue(testRoom.isCreaturePresent());
-        testRoom.removeAdventurer();
+        Adventurer testAdventurer = new Adventurer("testAdventurer");
+        Creature testCreature = new Creature("testCreature");
+
+        testRoom.addAdventurer(testAdventurer);
+        testRoom.addCreature(testCreature);
+
+        assertFalse(testRoom.getAdventurers().isEmpty());
+        assertFalse(testRoom.getCreatures().isEmpty());
+
+        testRoom.removeAdventurer(testAdventurer);
+        testRoom.removeCreature(testCreature);
         assertFalse(testRoom.isAdventurerPresent());
+        assertFalse(testRoom.isCreaturePresent());
     }
 }
