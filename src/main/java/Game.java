@@ -1,7 +1,11 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 //https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
 
 public class Game {
+    private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private boolean isOver;
     private final List<Room> roomsInMap;
     private int numberOfTurns;
@@ -137,19 +141,25 @@ public class Game {
     public void doTurn() {
 
         numberOfTurns++;
-        System.out.println("ARCANE MAZE: turn " + numberOfTurns);
+        logger.info("ARCANE MAZE: turn " + numberOfTurns);
+        displayGameStatus();
 
         for (Room currentRoom : roomsInMap) {
 
             if (currentRoom.isAdventurerPresent()) {
+                CharacterInterface healthiestAdventurer = findHealthiestPlayer(currentRoom.getAdventurers());
                 if (currentRoom.isCreaturePresent()) {
-                    fight(currentRoom);
+                    CharacterInterface healthiestCreature = findHealthiestPlayer(currentRoom.getCreatures());
+                    fight(currentRoom, healthiestAdventurer,healthiestCreature);
                 } else {
+
+                    if(currentRoom.roomHasFood()){
+                        healthiestAdventurer.eatFood(currentRoom);
+                    }
                     movePlayer(currentRoom);
                 }
             }
         }
-        displayGameStatus();
     }
 
     private CharacterInterface findHealthiestPlayer(List<CharacterInterface> entities){
@@ -184,48 +194,57 @@ public class Game {
         return this.isOver = allAdventurersDead || allCreaturesDead;
     }
 
-    public void fight(Room currentRoom) {
+    public void fight(Room currentRoom, CharacterInterface adventurer, CharacterInterface creature) {
 
+        logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + ") fought " + creature.getName() + "(health: " + creature.getHealth() + ")");
         int adventurerDiceRoll = diceRoll();
         int creatureDiceRoll = diceRoll();
-        CharacterInterface healthiestAdventurer = findHealthiestPlayer(currentRoom.getAdventurers());
-        CharacterInterface healthiestCreature = findHealthiestPlayer(currentRoom.getCreatures());
 
         if (!(adventurerDiceRoll == creatureDiceRoll)) {
 
             if (adventurerDiceRoll > creatureDiceRoll) {
-                healthiestCreature.subtractHealth(adventurerDiceRoll);
-                if(!healthiestCreature.isAlive()){
-                    currentRoom.removeCreature(healthiestCreature);
-                    creatures.remove(healthiestCreature);
-                }
+                adventurer.subtractHealth(adventurerDiceRoll);
             } else {
-                healthiestAdventurer.subtractHealth(creatureDiceRoll);
-                if(!healthiestAdventurer.isAlive()){
-                    currentRoom.removeAdventurer(healthiestAdventurer);
-                    adventurers.remove(healthiestAdventurer);
-                }
+                adventurer.subtractHealth(creatureDiceRoll);
             }
+        }
+
+        creature.subtractHealth(0.5);
+        adventurer.subtractHealth(0.5);
+
+        if(!creature.isAlive()){
+            currentRoom.removeCreature(creature);
+            logger.info(creature.getName() + "(health: " + creature.getHealth() + "); DEAD was killed");
+            creatures.remove(creature);
+        }
+
+        if(!adventurer.isAlive()){
+            currentRoom.removeAdventurer(adventurer);
+            logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD was killed");
+            logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD lost to Creature " + creature.getName()+ "(health: " + creature.getHealth() + ")");
+            adventurers.remove(adventurer);
         }
     }
 
     public void displayGameStatus() {
 
         for (Room currentRoom : roomsInMap) {
-            System.out.println("\t" + currentRoom.getRoomName() + ":");
+            logger.info("\t" + currentRoom.getRoomName() + ":");
+            logger.info("\tFood: " + currentRoom.getFoodName());
+
 
             List<CharacterInterface> adventurersInRoom = currentRoom.getAdventurers();
             List<CharacterInterface> creaturesInRoom = currentRoom.getCreatures();
 
             for (CharacterInterface adventurer : adventurersInRoom) {
-                System.out.println("\t\tAdventurer " + adventurer.getName() + "(health: " + adventurer.getHealth() + ") is here");
+                logger.info("\t\tAdventurer " + adventurer.getName() + "(health: " + adventurer.getHealth() + ") is here");
             }
 
             for (CharacterInterface creature : creaturesInRoom) {
-                System.out.println("\t\tCreature " + creature.getName() + "(health: " + creature.getHealth() + ") is here");
+                logger.info("\t\tCreature " + creature.getName() + "(health: " + creature.getHealth() + ") is here");
             }
         }
-        System.out.println();
+        logger.info("\n");
     }
 
     public void movePlayer(Room room) {

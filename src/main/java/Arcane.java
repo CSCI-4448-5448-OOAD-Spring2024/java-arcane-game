@@ -1,12 +1,16 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Arcane {
 
+    private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     public void runGame(){
 
-        System.out.println("Starting play...");
+        logger.info("Starting play...");
         Game arcane = new Game();
 
         List<CharacterInterface> adventurers = Arrays.asList(new Adventurer("Player1"), new Adventurer("Player2"));
@@ -36,6 +40,6 @@ public class Arcane {
         arcane.initFood(food);
         arcane.playGame();
         String winner = arcane.announceWinner();
-        System.out.println(winner);
+        logger.info(winner);
     }
 }

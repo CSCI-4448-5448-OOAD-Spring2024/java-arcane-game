@@ -19,6 +19,13 @@ public class Room {
     public List<Food> getFood(){
         return food;
     }
+    public List<String> getFoodName() {
+        List<String> foodNames = new ArrayList<>();
+        for (Food foodItem : food) {
+            foodNames.add(foodItem.getFoodName());
+        }
+        return foodNames;
+    }
     public boolean roomHasFood(){
         return !food.isEmpty();
     }
@@ -27,7 +34,7 @@ public class Room {
         this.food.add(newFood);
     }
 
-    public void removeFood(String foodToRemove){
+    public void removeFood(Food foodToRemove){
         food.remove(foodToRemove);
     }
     public String getRoomName() {

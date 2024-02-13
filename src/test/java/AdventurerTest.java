@@ -10,7 +10,7 @@ public class AdventurerTest {
         Adventurer testAdventurer = new Adventurer("Test Adventurer");
 
         assertEquals("Test Adventurer", testAdventurer.getName());
-        assertEquals(5, testAdventurer.getHealth());
+        assertEquals(5.0, testAdventurer.getHealth());
     }
 
     @Test
@@ -18,12 +18,12 @@ public class AdventurerTest {
 
         Adventurer testAdventurer = new Adventurer("Test Adventurer");
         testAdventurer.subtractHealth(2);
-        assertEquals(3, testAdventurer.getHealth());
+        assertEquals(3.0, testAdventurer.getHealth());
 
         assertTrue(testAdventurer.isAlive());
 
         testAdventurer.subtractHealth(5);
-        assertEquals(0, testAdventurer.getHealth());
+        assertEquals(-2, testAdventurer.getHealth());
 
     }
 
