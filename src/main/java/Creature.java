@@ -2,21 +2,19 @@ public class Creature implements CharacterInterface{
     private String name;
     private double health;
 
-    public Creature(String name){
+    public Creature(String name, double health){
 
         this.name = name;
-        this.health = 3.0;
+        this.health = health;
     }
     public String getName(){
         return name;
     }
 
-    @Override
     public void eatFood(Room room) {
 
     }
 
-    @Override
     public void addHealth(int val) {
 
     }

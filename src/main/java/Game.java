@@ -8,7 +8,6 @@ public class Game {
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private boolean isOver;
     private final List<Room> roomsInMap;
-
     private final Maze maze;
     private int numberOfTurns;
     private List<CharacterInterface> adventurers;
@@ -44,14 +43,6 @@ public class Game {
     public List<Room> getRoomsInMap(){
         return roomsInMap;
     }
-
-    public List<CharacterInterface> getAdventurers() {
-        return adventurers;
-    }
-
-    public List<CharacterInterface> getCreatures() {
-        return creatures;
-    }
     public void initializeAdventurerCreaturePositions(int dimensions){
 
         if(dimensions == 2) {
@@ -79,7 +70,6 @@ public class Game {
 
     public void playGame() {
         while (!isGameOver()) {
-
             doTurn();
         }
     }
@@ -173,7 +163,6 @@ public class Game {
             adventurers.remove(adventurer);
         }
     }
-
     public void displayGameStatus() {
 
         for (Room currentRoom : roomsInMap) {
@@ -193,7 +182,6 @@ public class Game {
             }
         }
     }
-
     public void movePlayer(Room room) {
         List<Room> availableRooms = room.getNeighboringRooms();
         List<CharacterInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
@@ -207,11 +195,9 @@ public class Game {
             logger.info("{}(health: {}) moved from {} to {}", adventurer.getName(), adventurer.getHealth(), room.getRoomName(), newRoom.getRoomName());
         }
     }
-
     public int diceRoll(){
         return new Random().nextInt(6) + 1;
     }
-
     public String announceWinner(){
 
         if(adventurers.isEmpty()){

@@ -7,7 +7,7 @@ public class AdventurerTest {
     @Test
     public void testAdventurerConstructor(){
 
-        Adventurer testAdventurer = new Adventurer("Test Adventurer");
+        Adventurer testAdventurer = new Adventurer("Test Adventurer", 5.0);
 
         assertEquals("Test Adventurer", testAdventurer.getName());
         assertEquals(5.0, testAdventurer.getHealth());
@@ -16,7 +16,7 @@ public class AdventurerTest {
     @Test
     public void testAdventurerHealth(){
 
-        Adventurer testAdventurer = new Adventurer("Test Adventurer");
+        Adventurer testAdventurer = new Adventurer("Test Adventurer", 5.0);
         testAdventurer.subtractHealth(2);
         assertEquals(3.0, testAdventurer.getHealth());
 

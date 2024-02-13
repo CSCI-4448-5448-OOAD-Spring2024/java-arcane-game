@@ -15,14 +15,16 @@ public class Arcane {
         maze.initializeRooms(3);
 
         Game arcane = new Game(maze);
+        double creatureHealth = 3.0;
+        double adventurerHealth = 5.0;
 
-        List<CharacterInterface> adventurers = Arrays.asList(new Adventurer("Player1"), new Adventurer("Player2"));
+        List<CharacterInterface> adventurers = Arrays.asList(new Adventurer("Player1", adventurerHealth), new Adventurer("Player2", adventurerHealth));
         List<CharacterInterface> creatures = Arrays.asList(
-                new Creature("Creature1"),
-                new Creature("Creature2"),
-                new Creature("Creature3"),
-                new Creature("Creature4"),
-                new Creature("Creature5")
+                new Creature("Creature1", creatureHealth),
+                new Creature("Creature2", creatureHealth),
+                new Creature("Creature3", creatureHealth),
+                new Creature("Creature4", creatureHealth),
+                new Creature("Creature5", creatureHealth)
         );
 
 

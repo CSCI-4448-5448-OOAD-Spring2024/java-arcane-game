@@ -8,7 +8,7 @@ public class CreatureTest {
     public void testCreatureConstructor(){
 
         String testName = "Test Creature";
-        Creature testCreature = new Creature(testName);
+        Creature testCreature = new Creature(testName, 3.0);
 
         assertEquals(testName, testCreature.getName());
         assertEquals(3.0, testCreature.getHealth());
@@ -18,7 +18,7 @@ public class CreatureTest {
     public void testCreatureHealth(){
 
         String testName = "Test Creature";
-        Creature testCreature = new Creature(testName);
+        Creature testCreature = new Creature(testName, 3.0);
         testCreature.subtractHealth(2);
         assertEquals(1.0, testCreature.getHealth());
 
@@ -28,5 +28,4 @@ public class CreatureTest {
         assertEquals(-4, testCreature.getHealth());
 
     }
-
 }

@@ -11,10 +11,10 @@ public class Adventurer implements CharacterInterface{
     private String name;
     private double health;
 
-    public Adventurer(String name){
+    public Adventurer(String name, double health){
 
         this.name = name;
-        this.health = 5.0;
+        this.health = health;
     }
 
     public String getName(){
@@ -30,7 +30,6 @@ public class Adventurer implements CharacterInterface{
     public boolean isAlive(){
         return this.getHealth() > 0;
     }
-
 
     public void eatFood(Room room) {
         List<Food> foodInRoom = new ArrayList<>(room.getFood());

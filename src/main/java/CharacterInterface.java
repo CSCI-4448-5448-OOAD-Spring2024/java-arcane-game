@@ -8,7 +8,6 @@ public interface CharacterInterface {
 
     public void eatFood(Room room);
 
-//    public String getLastFoodEaten();
     public void addHealth(int val);
     public boolean isAlive();
 }

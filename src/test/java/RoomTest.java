@@ -33,8 +33,8 @@ public class RoomTest {
 
         Room testRoom = new Room("Test Room");
 
-        Adventurer testAdventurer = new Adventurer("testAdventurer");
-        Creature testCreature = new Creature("testCreature");
+        Adventurer testAdventurer = new Adventurer("testAdventurer", 5.0);
+        Creature testCreature = new Creature("testCreature", 3.0);
 
         testRoom.addAdventurer(testAdventurer);
         testRoom.addCreature(testCreature);
