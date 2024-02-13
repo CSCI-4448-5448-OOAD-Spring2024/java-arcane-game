@@ -8,13 +8,16 @@ public class Game {
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private boolean isOver;
     private final List<Room> roomsInMap;
+
+    private final Maze maze;
     private int numberOfTurns;
     private List<CharacterInterface> adventurers;
     private List<CharacterInterface> creatures;
 
-    public Game() {
+    public Game(Maze maze) {
         this.isOver = false;
-        this.roomsInMap = new ArrayList<>();
+        this.maze = maze;
+        this.roomsInMap = maze.getRooms();
         this.numberOfTurns = 0;
         this.adventurers = new ArrayList<>();
         this.creatures = new ArrayList<>();
@@ -49,63 +52,6 @@ public class Game {
     public List<CharacterInterface> getCreatures() {
         return creatures;
     }
-    public void createMap(int dimensions) {
-
-        initializeRooms(dimensions);
-        initializeAdventurerCreaturePositions(dimensions);
-    }
-
-    public void initializeRooms(int dimensions) {
-
-        Room NorthWestRoom = new Room("Northwest");
-        Room NorthEastRoom = new Room("Northeast");
-        Room SouthWestRoom = new Room("Southwest");
-        Room SouthEastRoom = new Room("Southeast");
-        Room NorthRoom = new Room("North");
-        Room EastRoom = new Room("East");
-        Room SouthRoom = new Room("South");
-        Room WestRoom = new Room("West");
-        Room CenterRoom = new Room("Center");
-
-        if(dimensions == 2) {
-
-            NorthWestRoom.addNeighboringRoom(NorthEastRoom);
-            SouthWestRoom.addNeighboringRoom(SouthEastRoom);
-            NorthEastRoom.addNeighboringRoom(SouthEastRoom);
-            SouthWestRoom.addNeighboringRoom(NorthWestRoom);
-
-            roomsInMap.add(NorthWestRoom);
-            roomsInMap.add(NorthEastRoom);
-            roomsInMap.add(SouthEastRoom);
-            roomsInMap.add(SouthWestRoom);
-
-        } else if (dimensions == 3) {
-
-            NorthWestRoom.addNeighboringRoom(NorthRoom);
-            NorthWestRoom.addNeighboringRoom(WestRoom);
-            SouthWestRoom.addNeighboringRoom(SouthRoom);
-            SouthWestRoom.addNeighboringRoom(WestRoom);
-            NorthEastRoom.addNeighboringRoom(EastRoom);
-            NorthEastRoom.addNeighboringRoom(NorthRoom);
-            SouthEastRoom.addNeighboringRoom(EastRoom);
-            SouthEastRoom.addNeighboringRoom(SouthRoom);
-            CenterRoom.addNeighboringRoom(WestRoom);
-            CenterRoom.addNeighboringRoom(EastRoom);
-
-
-            roomsInMap.add(NorthWestRoom);
-            roomsInMap.add(NorthRoom);
-            roomsInMap.add(NorthEastRoom);
-            roomsInMap.add(WestRoom);
-            roomsInMap.add(CenterRoom);
-            roomsInMap.add(EastRoom);
-            roomsInMap.add(SouthWestRoom);
-            roomsInMap.add(SouthRoom);
-            roomsInMap.add(SouthEastRoom);
-
-        }
-    }
-
     public void initializeAdventurerCreaturePositions(int dimensions){
 
         if(dimensions == 2) {
@@ -193,7 +139,6 @@ public class Game {
 
         return this.isOver = allAdventurersDead || allCreaturesDead;
     }
-
     public void fight(Room currentRoom, CharacterInterface adventurer, CharacterInterface creature) {
 
         logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + ") fought " + creature.getName() + "(health: " + creature.getHealth() + ")");

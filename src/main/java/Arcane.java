@@ -11,7 +11,10 @@ public class Arcane {
     public void runGame(){
 
         logger.info("Starting play...");
-        Game arcane = new Game();
+        Maze maze = new Maze();
+        maze.initializeRooms(3);
+
+        Game arcane = new Game(maze);
 
         List<CharacterInterface> adventurers = Arrays.asList(new Adventurer("Player1"), new Adventurer("Player2"));
         List<CharacterInterface> creatures = Arrays.asList(
@@ -25,7 +28,7 @@ public class Arcane {
 
 
         arcane.setEntities(adventurers, creatures);
-        arcane.createMap(3);
+        arcane.initializeAdventurerCreaturePositions(3);
         List<Food> food =new ArrayList<Food>();
         food.add(new Food("Steak"));
         food.add(new Food("Pasta"));
