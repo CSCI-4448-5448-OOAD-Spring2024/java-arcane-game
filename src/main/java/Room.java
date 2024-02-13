@@ -7,14 +7,29 @@ public class Room {
     private List<Room> neighboringRooms;
     private List<CharacterInterface> adventurers;
     private List<CharacterInterface> creatures;
+    private List<Food> food;
 
     public Room(String name) {
         this.name = name;
         this.neighboringRooms = new ArrayList<>();
         this.adventurers = new ArrayList<>();
         this.creatures = new ArrayList<>();
+        this.food = new ArrayList<>();
+    }
+    public List<Food> getFood(){
+        return food;
+    }
+    public boolean roomHasFood(){
+        return !food.isEmpty();
     }
 
+    public void addFood(Food newFood){
+        this.food.add(newFood);
+    }
+
+    public void removeFood(String foodToRemove){
+        food.remove(foodToRemove);
+    }
     public String getRoomName() {
         return name;
     }

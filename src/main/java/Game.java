@@ -22,6 +22,14 @@ public class Game {
         this.creatures = new ArrayList<>(creatureList);
     }
 
+    public void initFood(List<Food> foodItems){
+
+        for (Food food : foodItems) {
+
+            Room roomForFood = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+            roomForFood.addFood(food);
+        }
+    }
     public int getNumberOfTurns() {
         return numberOfTurns;
     }
