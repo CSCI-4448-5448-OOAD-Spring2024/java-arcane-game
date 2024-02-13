@@ -203,10 +203,13 @@ public class Game {
         if (!(adventurerDiceRoll == creatureDiceRoll)) {
 
             if (adventurerDiceRoll > creatureDiceRoll) {
-                adventurer.subtractHealth(adventurerDiceRoll);
+                creature.subtractHealth(adventurerDiceRoll);
             } else {
                 adventurer.subtractHealth(creatureDiceRoll);
             }
+        }
+        else{
+            logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + ") drew against " + creature.getName() + "(health: " + creature.getHealth() + ")");
         }
 
         creature.subtractHealth(0.5);
@@ -244,7 +247,6 @@ public class Game {
                 logger.info("\t\tCreature " + creature.getName() + "(health: " + creature.getHealth() + ") is here");
             }
         }
-        logger.info("\n");
     }
 
     public void movePlayer(Room room) {
@@ -257,6 +259,7 @@ public class Game {
             Room newRoom = availableRooms.get(new Random().nextInt(availableRooms.size()));
             room.removeAdventurer(adventurer);
             newRoom.addAdventurer(adventurer);
+            logger.info("{}(health: {}) moved from {} to {}", adventurer.getName(), adventurer.getHealth(), room.getRoomName(), newRoom.getRoomName());
         }
     }
 
@@ -267,7 +270,7 @@ public class Game {
     public String announceWinner(){
 
         if(adventurers.isEmpty()){
-            return "Creatures Won! \n";
+            return "Boo, the Creatures Won! \n";
         }
         else if(creatures.isEmpty()){
             return "Adventurers Won! \n";
