@@ -6,11 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Arcane {
-
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
-    public void runGame(){
+    public void runGame3X3Map(){
 
         logger.info("Starting play...");
+        logger.info("Map Size: 3x3");
+
         Maze maze = new Maze();
         maze.initializeRooms(3);
 
@@ -47,4 +48,37 @@ public class Arcane {
         String winner = arcane.announceWinner();
         logger.info(winner);
     }
+    public void runGame2X2Map(){
+
+        logger.info("Starting play...");
+        logger.info("Map Size: 2x2");
+        Maze maze = new Maze();
+        maze.initializeRooms(2);
+
+        Game arcane = new Game(maze);
+        double creatureHealth = 5.0;
+        double adventurerHealth = 5.0;
+
+        List<AdventurerInterface> adventurers = Arrays.asList(new Adventurer("Player1", adventurerHealth));
+        List<CharacterInterface> creatures = Arrays.asList(new Creature("Creature1", creatureHealth));
+
+        arcane.setEntities(adventurers, creatures);
+        arcane.initializeAdventurerCreaturePositions(2);
+        List<Food> food =new ArrayList<Food>();
+        food.add(new Food("Steak"));
+        food.add(new Food("Pasta"));
+        food.add(new Food("Milk"));
+        food.add(new Food("Chicken"));
+        food.add(new Food("Fish"));
+        food.add(new Food("Burrito"));
+        food.add(new Food("Eggs"));
+        food.add(new Food("Toast"));
+        food.add(new Food("Burger"));
+        food.add(new Food("Sushi"));
+        arcane.initFood(food);
+        arcane.playGame();
+        String winner = arcane.announceWinner();
+        logger.info(winner);
+    }
+
 }

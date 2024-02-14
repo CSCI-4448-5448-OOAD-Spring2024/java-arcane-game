@@ -2,7 +2,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+//Documentation used
 //https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
+//https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 
 public class Game {
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
@@ -20,16 +22,13 @@ public class Game {
         this.adventurers = new ArrayList<>();
         this.creatures = new ArrayList<>();
     }
-
     public void setEntities(List<AdventurerInterface> adventurerList, List<CharacterInterface> creatureList){
-
         this.adventurers = new ArrayList<>(adventurerList);
         this.creatures = new ArrayList<>(creatureList);
     }
     public void initFood(List<Food> foodItems){
 
         for (Food food : foodItems) {
-
             Room roomForFood = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
             roomForFood.addFood(food);
         }
@@ -43,28 +42,28 @@ public class Game {
         return roomsInMap;
     }
     public void initializeAdventurerCreaturePositions(int dimensions){
-
         if(dimensions == 2) {
-            Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-            Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-
-            adventurerStartingRoom.addAdventurer(adventurers.get(0));
-            creatureStartingRoom.addCreature(creatures.get(0));
-
+            init2x2MapEntities();
         } else if (dimensions == 3) {
-
-            for(int i = 0; i < 2; i++){
-                Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-                adventurerStartingRoom.addAdventurer(adventurers.get(i));
-            }
-            for(int i = 0; i < 5; i++){
-                Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-                creatureStartingRoom.addCreature(creatures.get(i));
-            }
+            init3x3MapEntities();
         }
-
-
-
+        else{logger.error("Invalid Dimensions");}
+    }
+    public void init2x2MapEntities(){
+        Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+        Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+        adventurerStartingRoom.addAdventurer(adventurers.get(0));
+        creatureStartingRoom.addCreature(creatures.get(0));
+    }
+    public void init3x3MapEntities(){
+        for(int i = 0; i < 2; i++){
+            Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+            adventurerStartingRoom.addAdventurer(adventurers.get(i));
+        }
+        for(int i = 0; i < 5; i++){
+            Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+            creatureStartingRoom.addCreature(creatures.get(i));
+        }
     }
 
     //Example of cohesion: playGame and doTurn work together for proper game functionality
@@ -74,27 +73,25 @@ public class Game {
         }
     }
     public void doTurn() {
-
         numberOfTurns++;
         logger.info("ARCANE MAZE: turn " + numberOfTurns);
         displayGameStatus();
 
         for (Room currentRoom : roomsInMap) {
-
             if (currentRoom.isAdventurerPresent()) {
-                AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(currentRoom.getAdventurers());
-                if (currentRoom.isCreaturePresent()) {
-                    CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
-                    fight(currentRoom, healthiestAdventurer,healthiestCreature);
-                } else {
-
-                    if(currentRoom.roomHasFood()){
-                        healthiestAdventurer.eatFood(currentRoom);
-                    }
-                    movePlayer(currentRoom);
-                }
+                AdventurerTurn(currentRoom);
             }
         }
+    }
+    public void AdventurerTurn(Room currentRoom){
+        AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(currentRoom.getAdventurers());
+        if (currentRoom.isCreaturePresent()) {
+            CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
+            fight(currentRoom, healthiestAdventurer,healthiestCreature);
+        } else {
+            if(currentRoom.roomHasFood()){
+                healthiestAdventurer.eatFood(currentRoom);}
+            movePlayer(currentRoom);}
     }
 
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
@@ -121,24 +118,9 @@ public class Game {
         return healthiest;
     }
     public boolean isGameOver() {
-
-        boolean allAdventurersDead = true;
-        for (CharacterInterface adventurer : this.adventurers) {
-            if (adventurer.getHealth() > 0) {
-                allAdventurersDead = false;
-                break;
-            }
-        }
-
-        boolean allCreaturesDead = true;
-        for (CharacterInterface creature : this.creatures) {
-            if (creature.getHealth() > 0) {
-                allCreaturesDead = false;
-                break;
-            }
-        }
-
-        return this.isOver = allAdventurersDead || allCreaturesDead;
+        boolean allAdventurersDead = adventurers.stream().allMatch(adventurer -> adventurer.getHealth() <= 0);
+        boolean allCreaturesDead = creatures.stream().allMatch(creature -> creature.getHealth() <= 0);
+        return isOver = allAdventurersDead || allCreaturesDead;
     }
     public void fight(Room currentRoom, CharacterInterface adventurer, CharacterInterface creature) {
 
@@ -147,7 +129,6 @@ public class Game {
         int creatureDiceRoll = diceRoll();
 
         if (!(adventurerDiceRoll == creatureDiceRoll)) {
-
             if (adventurerDiceRoll > creatureDiceRoll) {
                 creature.subtractHealth(adventurerDiceRoll);
             } else {
@@ -160,13 +141,15 @@ public class Game {
 
         creature.subtractHealth(0.5);
         adventurer.subtractHealth(0.5);
+        handleCreatureAdventurerDeath(adventurer,creature,currentRoom);
+    }
+    public void handleCreatureAdventurerDeath(CharacterInterface adventurer, CharacterInterface creature,Room currentRoom){
 
         if(!creature.isAlive()){
             currentRoom.removeCreature(creature);
             logger.info(creature.getName() + "(health: " + creature.getHealth() + "); DEAD was killed");
             creatures.remove(creature);
         }
-
         if(!adventurer.isAlive()){
             currentRoom.removeAdventurer(adventurer);
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD was killed");
@@ -174,6 +157,7 @@ public class Game {
             adventurers.remove(adventurer);
         }
     }
+
     public void displayGameStatus() {
 
         for (Room currentRoom : roomsInMap) {
@@ -196,7 +180,6 @@ public class Game {
     public void movePlayer(Room room) {
         List<Room> availableRooms = room.getNeighboringRooms();
         List<AdventurerInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
-
         Iterator<AdventurerInterface> iterator = adventurersInRoom.iterator();
         while (iterator.hasNext()) {
             AdventurerInterface adventurer = iterator.next();

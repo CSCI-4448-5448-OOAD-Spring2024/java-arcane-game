@@ -8,7 +8,8 @@ public class ArcaneTest {
     public void testRunGame()
     {
         Arcane arcaneTest = new Arcane();
-        arcaneTest.runGame();
+        arcaneTest.runGame3X3Map();
+        arcaneTest.runGame2X2Map();
         assertNotNull(arcaneTest);
     }
 }
