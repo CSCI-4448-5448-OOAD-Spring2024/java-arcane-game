@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ArcaneTest {
@@ -11,7 +8,8 @@ public class ArcaneTest {
     public void testRunGame()
     {
         Arcane arcaneTest = new Arcane();
-        arcaneTest.runGame();
+        arcaneTest.runGame3X3Map();
+        arcaneTest.runGame2X2Map();
         assertNotNull(arcaneTest);
     }
 }

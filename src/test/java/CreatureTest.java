@@ -8,25 +8,24 @@ public class CreatureTest {
     public void testCreatureConstructor(){
 
         String testName = "Test Creature";
-        Creature testCreature = new Creature(testName);
+        Creature testCreature = new Creature(testName, 3.0);
 
         assertEquals(testName, testCreature.getName());
-        assertEquals(5, testCreature.getHealth());
+        assertEquals(3.0, testCreature.getHealth());
     }
 
     @Test
     public void testCreatureHealth(){
 
         String testName = "Test Creature";
-        Creature testCreature = new Creature(testName);
+        Creature testCreature = new Creature(testName, 3.0);
         testCreature.subtractHealth(2);
-        assertEquals(3, testCreature.getHealth());
+        assertEquals(1.0, testCreature.getHealth());
 
         assertTrue(testCreature.isAlive());
 
         testCreature.subtractHealth(5);
-        assertEquals(0, testCreature.getHealth());
+        assertEquals(-4, testCreature.getHealth());
 
     }
-
 }

@@ -1,8 +1,9 @@
+import java.util.List;
+
 public interface CharacterInterface {
 
-    public int getHealth();
-    public void subtractHealth(int val);
+    public double getHealth();
+    public void subtractHealth(double val);
     public String getName();
-
     public boolean isAlive();
 }

@@ -16,7 +16,7 @@
     # Game Status Appender --- just for logging the state of the game
     <appender name="Game_Status" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%cyan(%msg)</pattern>
+            <pattern>%cyan(%msg%n)</pattern>
         </encoder>
     </appender>
 
