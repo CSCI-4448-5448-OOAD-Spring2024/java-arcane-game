@@ -10,21 +10,10 @@ public class Creature implements CharacterInterface{
     public String getName(){
         return name;
     }
-
-    public void eatFood(Room room) {
-
-    }
-
-    public void addHealth(int val) {
-
-    }
-
     public double getHealth() {
         return health;
     }
-
     public void subtractHealth(double val){this.health -= val;}
-
     public boolean isAlive(){
         return this.getHealth() > 0;
     }

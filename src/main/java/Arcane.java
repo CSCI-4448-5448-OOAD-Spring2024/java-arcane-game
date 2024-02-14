@@ -18,7 +18,7 @@ public class Arcane {
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
 
-        List<CharacterInterface> adventurers = Arrays.asList(new Adventurer("Player1", adventurerHealth), new Adventurer("Player2", adventurerHealth));
+        List<AdventurerInterface> adventurers = Arrays.asList(new Adventurer("Player1", adventurerHealth), new Adventurer("Player2", adventurerHealth));
         List<CharacterInterface> creatures = Arrays.asList(
                 new Creature("Creature1", creatureHealth),
                 new Creature("Creature2", creatureHealth),

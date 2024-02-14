@@ -10,10 +10,9 @@ public class Game {
     private final List<Room> roomsInMap;
     private final Maze maze;
     private int numberOfTurns;
-    private List<CharacterInterface> adventurers;
+    private List<AdventurerInterface> adventurers;
     private List<CharacterInterface> creatures;
-
-    public Game(Maze maze) {
+    public Game(Maze maze) { //Example of dependency injection through constructor
         this.isOver = false;
         this.maze = maze;
         this.roomsInMap = maze.getRooms();
@@ -22,12 +21,11 @@ public class Game {
         this.creatures = new ArrayList<>();
     }
 
-    public void setEntities(List<CharacterInterface> adventurerList, List<CharacterInterface> creatureList){
+    public void setEntities(List<AdventurerInterface> adventurerList, List<CharacterInterface> creatureList){
 
         this.adventurers = new ArrayList<>(adventurerList);
         this.creatures = new ArrayList<>(creatureList);
     }
-
     public void initFood(List<Food> foodItems){
 
         for (Food food : foodItems) {
@@ -40,6 +38,7 @@ public class Game {
         return numberOfTurns;
     }
 
+    //Example of encapsulation: instead of accessing rooms directly, must use a method
     public List<Room> getRoomsInMap(){
         return roomsInMap;
     }
@@ -68,12 +67,12 @@ public class Game {
 
     }
 
+    //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {
         while (!isGameOver()) {
             doTurn();
         }
     }
-
     public void doTurn() {
 
         numberOfTurns++;
@@ -83,9 +82,9 @@ public class Game {
         for (Room currentRoom : roomsInMap) {
 
             if (currentRoom.isAdventurerPresent()) {
-                CharacterInterface healthiestAdventurer = findHealthiestPlayer(currentRoom.getAdventurers());
+                AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(currentRoom.getAdventurers());
                 if (currentRoom.isCreaturePresent()) {
-                    CharacterInterface healthiestCreature = findHealthiestPlayer(currentRoom.getCreatures());
+                    CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
                     fight(currentRoom, healthiestAdventurer,healthiestCreature);
                 } else {
 
@@ -98,10 +97,22 @@ public class Game {
         }
     }
 
-    private CharacterInterface findHealthiestPlayer(List<CharacterInterface> entities){
+    //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
+    private CharacterInterface findHealthiestCreature(List<CharacterInterface> entities){
 
         CharacterInterface healthiest = entities.get(0);
         for(CharacterInterface character : entities){
+            if(character.getHealth() > healthiest.getHealth()){
+                healthiest = character;
+            }
+        }
+
+        return healthiest;
+    }
+    private AdventurerInterface findHealthiestAdventurer(List<AdventurerInterface> entities){
+
+        AdventurerInterface healthiest = entities.get(0);
+        for(AdventurerInterface character : entities){
             if(character.getHealth() > healthiest.getHealth()){
                 healthiest = character;
             }
@@ -170,7 +181,7 @@ public class Game {
             logger.info("\tFood: " + currentRoom.getFoodName());
 
 
-            List<CharacterInterface> adventurersInRoom = currentRoom.getAdventurers();
+            List<AdventurerInterface> adventurersInRoom = currentRoom.getAdventurers();
             List<CharacterInterface> creaturesInRoom = currentRoom.getCreatures();
 
             for (CharacterInterface adventurer : adventurersInRoom) {
@@ -184,11 +195,11 @@ public class Game {
     }
     public void movePlayer(Room room) {
         List<Room> availableRooms = room.getNeighboringRooms();
-        List<CharacterInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
+        List<AdventurerInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
 
-        Iterator<CharacterInterface> iterator = adventurersInRoom.iterator();
+        Iterator<AdventurerInterface> iterator = adventurersInRoom.iterator();
         while (iterator.hasNext()) {
-            CharacterInterface adventurer = iterator.next();
+            AdventurerInterface adventurer = iterator.next();
             Room newRoom = availableRooms.get(new Random().nextInt(availableRooms.size()));
             room.removeAdventurer(adventurer);
             newRoom.addAdventurer(adventurer);

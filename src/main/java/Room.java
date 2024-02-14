@@ -5,7 +5,7 @@ public class Room {
 
     private String name;
     private List<Room> neighboringRooms;
-    private List<CharacterInterface> adventurers;
+    private List<AdventurerInterface> adventurers;
     private List<CharacterInterface> creatures;
     private List<Food> food;
 
@@ -51,7 +51,7 @@ public class Room {
         this.neighboringRooms.add(newNeighbor);
         newNeighbor.neighboringRooms.add(this);
     }
-    public void addAdventurer(CharacterInterface adventurer) {
+    public void addAdventurer(AdventurerInterface adventurer) {
         adventurers.add(adventurer);
     }
 
@@ -59,7 +59,7 @@ public class Room {
         creatures.add(creature);
     }
 
-    public List<CharacterInterface> getAdventurers() {
+    public List<AdventurerInterface> getAdventurers() {
         return adventurers;
     }
 

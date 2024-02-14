@@ -10,7 +10,7 @@ public class GameTest {
     @Test
     public void TestGameConstructor(){
 
-        List<CharacterInterface> testAdventurers = Arrays.asList(new Adventurer("Test Adventurer", 5.0));
+        List<AdventurerInterface> testAdventurers = Arrays.asList(new Adventurer("Test Adventurer", 5.0));
         List<CharacterInterface> testCreatures = Arrays.asList(new Creature("Test Creature", 3.0));
         Maze maze = new Maze();
         maze.initializeRooms(3);
