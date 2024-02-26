@@ -91,9 +91,8 @@ public class Game {
         } else {
             if(currentRoom.roomHasFood()){
                 healthiestAdventurer.eatFood(currentRoom);}
-            movePlayer(currentRoom);}
+            moveAdventurers(currentRoom);}
     }
-
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
     private CharacterInterface findHealthiestCreature(List<CharacterInterface> entities){
 
@@ -177,7 +176,7 @@ public class Game {
             }
         }
     }
-    public void movePlayer(Room room) {
+    public void moveAdventurers(Room room) {
         List<Room> availableRooms = room.getNeighboringRooms();
         List<AdventurerInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
         Iterator<AdventurerInterface> iterator = adventurersInRoom.iterator();
