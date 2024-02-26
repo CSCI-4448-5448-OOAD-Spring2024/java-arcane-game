@@ -85,7 +85,12 @@ public class Game {
     }
     public void AdventurerTurn(Room currentRoom){
         AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(currentRoom.getAdventurers());
+
         if (currentRoom.isCreaturePresent()) {
+
+            if(currentRoom.hasDemons()) {
+                demonTurn(currentRoom, currentRoom.getAdventurers(), currentRoom.getDemons());
+            }
             CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
             fight(currentRoom, healthiestAdventurer,healthiestCreature);
         } else {
@@ -93,6 +98,18 @@ public class Game {
                 healthiestAdventurer.eatFood(currentRoom);}
             moveAdventurers(currentRoom);}
     }
+
+    private void demonTurn(Room currentRoom, List<AdventurerInterface> adventurers, List<CharacterInterface> demons) {
+        for (CharacterInterface demon : demons) {
+            for (AdventurerInterface adventurer : adventurers) {
+                logger.info("{}(health: {}) is fighting with Demon {}(health: {})",
+                        adventurer.getName(), adventurer.getHealth(), demon.getName(), demon.getHealth());
+
+                fight(currentRoom, adventurer, demon);
+            }
+        }
+    }
+
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
     private CharacterInterface findHealthiestCreature(List<CharacterInterface> entities){
 

@@ -25,7 +25,8 @@ public class Arcane {
                 new Creature("Creature2", creatureHealth),
                 new Creature("Creature3", creatureHealth),
                 new Creature("Creature4", creatureHealth),
-                new Creature("Creature5", creatureHealth)
+//                new Creature("Creature777", creatureHealth)
+                new Demon("Demon", 15)
         );
 
 

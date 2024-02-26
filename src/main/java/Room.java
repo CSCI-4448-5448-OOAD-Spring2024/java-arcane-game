@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Room {
     private String name;
@@ -56,6 +57,17 @@ public class Room {
     public List<CharacterInterface> getCreatures() {
         return creatures;
     }
+
+    public List<CharacterInterface> getDemons() {
+        return creatures.stream()
+                .filter(character -> character instanceof Demon)
+                .collect(Collectors.toList());
+    }
+
+    public boolean hasDemons(){
+        return !getDemons().isEmpty();
+    }
+
     public boolean isAdventurerPresent() {
         return !adventurers.isEmpty();
     }
