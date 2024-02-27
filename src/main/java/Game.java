@@ -91,11 +91,18 @@ public class Game {
         logger.info("ARCANE MAZE: turn " + numberOfTurns);
         displayGameStatus();
 
+        List<AdventurerInterface> adventurersToProcess = new ArrayList<>(adventurers);
+
         for (Room currentRoom : roomsInMap) {
-            if (currentRoom.isAdventurerPresent()) {
+            List<AdventurerInterface> adventurersInRoom = new ArrayList<>(adventurersToProcess);
+            adventurersInRoom.retainAll(currentRoom.getAdventurers());
+
+            if (!adventurersInRoom.isEmpty()) {
                 handleAdventurerTurns(currentRoom);
+                adventurersToProcess.removeAll(adventurersInRoom);
             }
         }
+
     }
 
     public void handleAdventurerTurns(Room currentRoom){
@@ -117,21 +124,29 @@ public class Game {
         if(!adventurers.isEmpty()){
             AdventurerTurn(adventurers, currentRoom);
         }
+
     }
 
     public void knightTurn(List<AdventurerInterface> knights,  Room currentRoom){
+
         for (AdventurerInterface knight : knights) {
             if (currentRoom.isCreaturePresent()) {
-                for (CharacterInterface creature : currentRoom.getCreatures()) {
+
+                List<CharacterInterface> creaturesCopy = new ArrayList<>(currentRoom.getCreatures());
+
+                for (CharacterInterface creature : creaturesCopy) {
                     fight(currentRoom, knight, creature);
                 }
             }
         }
+        moveAdventurers(currentRoom, currentRoom.getKnights());
+
     }
     public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
+
         for (AdventurerInterface coward : cowards) {
             if (currentRoom.isCreaturePresent() && !currentRoom.hasDemons()) {
-                moveAdventurers(currentRoom);
+                moveAdventurers(currentRoom,cowards);
                 coward.subtractHealth(0.5);
             } else if (currentRoom.hasDemons()) {
                 for (CharacterInterface demon : currentRoom.getDemons()) {
@@ -139,13 +154,15 @@ public class Game {
                 }
             }
             else{
-                moveAdventurers(currentRoom);
+                moveAdventurers(currentRoom,cowards);
             }
         }
     }
 
     public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
+
         for (AdventurerInterface glutton : gluttons) {
+
             if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
                 glutton.eatFood(currentRoom);
             } else if (currentRoom.hasDemons()) {
@@ -158,58 +175,23 @@ public class Game {
                 fight(currentRoom, glutton,healthiestCreature);
             }
             else{
-                moveAdventurers(currentRoom);
+                moveAdventurers(currentRoom,gluttons);
             }
         }
     }
     public void AdventurerTurn(List<AdventurerInterface> adventurers, Room currentRoom){
+
         AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(adventurers);
 
-        if (currentRoom.isCreaturePresent()) {
+        for(AdventurerInterface adventurer : adventurers){
 
-            if(currentRoom.hasDemons()) {
-                demonTurn(currentRoom, currentRoom.getDemons());
-            }
-            if(currentRoom.isNonDemonCreaturePresent()){
-                CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getNonDemonCreatures());
-                fight(currentRoom, healthiestAdventurer,healthiestCreature);
-            }
+            if (currentRoom.isCreaturePresent()) {
 
-        } else {
-            if(currentRoom.roomHasFood()){
-                healthiestAdventurer.eatFood(currentRoom);
-            }
-            moveAdventurers(currentRoom);}
-    }
-
-    private void demonTurn(Room currentRoom, List<CharacterInterface> demons) {
-
-        List<AdventurerInterface> adventurers = currentRoom.getAdventurers();
-        Iterator<AdventurerInterface> adventurerIterator = adventurers.iterator();
-        Iterator<CharacterInterface> demonIterator = demons.iterator();
-
-        while (adventurerIterator.hasNext()) {
-            AdventurerInterface adventurer = adventurerIterator.next();
-
-            while (demonIterator.hasNext()) {
-                CharacterInterface demon = demonIterator.next();
-
-
-                logger.info("{}(health: {}) is fighting with Demon {}(health: {})",
-                        adventurer.getName(), adventurer.getHealth(), demon.getName(), demon.getHealth());
-
-                fight(currentRoom, adventurer, demon);
-
-                if (!currentRoom.getAdventurers().contains(adventurer)) {
-                    adventurerIterator = currentRoom.getAdventurers().iterator();
-                    break;
-                }
-                if (!currentRoom.getDemons().contains(demon)) {
-                    demonIterator = currentRoom.getDemons().iterator();
-                    break;
-                }
+                fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));
             }
         }
+            if(currentRoom.roomHasFood()){healthiestAdventurer.eatFood(currentRoom);}
+            moveAdventurers(currentRoom,currentRoom.getNonSpecificAdventurers());
     }
 
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
@@ -242,9 +224,12 @@ public class Game {
     }
     public void fight(Room currentRoom, CharacterInterface adventurer, CharacterInterface creature) {
 
-        logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + ") fought " + creature.getName() + "(health: " + creature.getHealth() + ")");
+        logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + ") is fighting " + creature.getName() + "(health: " + creature.getHealth() + ")");
         int adventurerDiceRoll = diceRoll();
         int creatureDiceRoll = diceRoll();
+        logger.info(adventurer.getName() + " rolled a " + adventurerDiceRoll);
+        logger.info(creature.getName() + " rolled a " + creatureDiceRoll);
+
 
         if (!(adventurerDiceRoll == creatureDiceRoll)) {
             if (adventurerDiceRoll > creatureDiceRoll) {
@@ -295,9 +280,9 @@ public class Game {
             }
         }
     }
-    public void moveAdventurers(Room room) {
+    public void moveAdventurers(Room room, List<AdventurerInterface> adventurers) {
         List<Room> availableRooms = room.getNeighboringRooms();
-        List<AdventurerInterface> adventurersInRoom = new ArrayList<>(room.getAdventurers());
+        List<AdventurerInterface> adventurersInRoom = new ArrayList<>(adventurers);
         Iterator<AdventurerInterface> iterator = adventurersInRoom.iterator();
         while (iterator.hasNext()) {
             AdventurerInterface adventurer = iterator.next();
@@ -308,6 +293,7 @@ public class Game {
         }
     }
     public int diceRoll(){
+
         return new Random().nextInt(6) + 1;
     }
     public String announceWinner(){
