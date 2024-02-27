@@ -78,8 +78,6 @@ public class Game {
             creatureStartingRoom.addCreature(creatures.get(i));
         }
     }
-
-
     //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {
         while (!isGameOver()) {
@@ -102,7 +100,6 @@ public class Game {
                 adventurersToProcess.removeAll(adventurersInRoom);
             }
         }
-
     }
 
     public void handleAdventurerTurns(Room currentRoom){
@@ -126,7 +123,6 @@ public class Game {
         }
 
     }
-
     public void knightTurn(List<AdventurerInterface> knights,  Room currentRoom){
 
         for (AdventurerInterface knight : knights) {
@@ -139,30 +135,27 @@ public class Game {
                 }
             }
         }
-        moveAdventurers(currentRoom, currentRoom.getKnights());
-
+        if(!currentRoom.hasDemons()){
+            moveAdventurers(currentRoom, currentRoom.getKnights());
+        }
     }
     public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
 
-        for (AdventurerInterface coward : cowards) {
-            if (currentRoom.isCreaturePresent() && !currentRoom.hasDemons()) {
-                moveAdventurers(currentRoom,cowards);
-                coward.subtractHealth(0.5);
-            } else if (currentRoom.hasDemons()) {
+        for(AdventurerInterface coward : cowards){
+            if(currentRoom.hasDemons()){
                 for (CharacterInterface demon : currentRoom.getDemons()) {
                     fight(currentRoom, coward, demon);
                 }
             }
             else{
                 moveAdventurers(currentRoom,cowards);
+                coward.subtractHealth(0.5);
             }
         }
     }
 
     public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
-
         for (AdventurerInterface glutton : gluttons) {
-
             if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
                 glutton.eatFood(currentRoom);
             } else if (currentRoom.hasDemons()) {
@@ -174,24 +167,21 @@ public class Game {
                 CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getNonDemonCreatures());
                 fight(currentRoom, glutton,healthiestCreature);
             }
-            else{
+            else if (!currentRoom.hasDemons()){
                 moveAdventurers(currentRoom,gluttons);
             }
         }
     }
     public void AdventurerTurn(List<AdventurerInterface> adventurers, Room currentRoom){
-
         AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(adventurers);
 
         for(AdventurerInterface adventurer : adventurers){
-
-            if (currentRoom.isCreaturePresent()) {
-
-                fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));
-            }
+            if (currentRoom.isCreaturePresent()) {fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));}
         }
             if(currentRoom.roomHasFood()){healthiestAdventurer.eatFood(currentRoom);}
-            moveAdventurers(currentRoom,currentRoom.getNonSpecificAdventurers());
+            if(!currentRoom.hasDemons()) {
+                moveAdventurers(currentRoom, currentRoom.getNonSpecificAdventurers());
+            }
     }
 
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces

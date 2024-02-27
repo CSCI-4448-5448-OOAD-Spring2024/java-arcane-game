@@ -19,7 +19,7 @@ public class Arcane {
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
 
-        List<AdventurerInterface> adventurers = Arrays.asList(new Glutton("Arhut", adventurerHealth), new Adventurer("Player2", adventurerHealth));
+        List<AdventurerInterface> adventurers = Arrays.asList(new Coward("Arhut", adventurerHealth), new Adventurer("Player2", adventurerHealth));
         List<CharacterInterface> creatures = Arrays.asList(
                 new Creature("Creature1", creatureHealth),
                 new Creature("Creature2", creatureHealth),
@@ -92,24 +92,24 @@ public class Arcane {
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
 
-        // Create adventurers
-        List<AdventurerInterface> adventurers = new ArrayList<>();
-        for (int i = 1; i <= n; i++) {
-            adventurers.add(new Adventurer("Player" + i, adventurerHealth));
-        }
+        List<AdventurerInterface> adventurers = Arrays.asList(
+                new Coward("Arthur", adventurerHealth),
+                new Adventurer("Aventurer1", adventurerHealth),
+                new Knight("Ainsley", adventurerHealth),
+                new Glutton("Glutton", adventurerHealth)
+        );
 
-        // Create creatures
-        List<CharacterInterface> creatures = new ArrayList<>();
-        for (int i = 1; i <= n; i++) {
-            creatures.add(new Creature("Creature" + i, creatureHealth));
-        }
-        // Add a Demon for an extra challenge
-        creatures.add(new Demon("Demon", 15));
+        List<CharacterInterface> creatures = Arrays.asList(
+                new Creature("Creature1", creatureHealth),
+                new Creature("Creature2", creatureHealth),
+                new Creature("Creature3", creatureHealth),
+                new Creature("Creature4", creatureHealth),
+                new Demon("Demon", 15)
+        );
 
         arcane.setEntities(adventurers, creatures);
         arcane.initializeAdventurerCreaturePositions(n);
 
-        // Initialize food items
         List<Food> food = new ArrayList<>();
         food.add(new Food("Steak"));
         food.add(new Food("Pasta"));
