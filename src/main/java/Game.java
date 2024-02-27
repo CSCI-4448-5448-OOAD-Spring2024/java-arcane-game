@@ -89,7 +89,7 @@ public class Game {
         if (currentRoom.isCreaturePresent()) {
 
             if(currentRoom.hasDemons()) {
-                demonTurn(currentRoom, currentRoom.getAdventurers(), currentRoom.getDemons());
+                demonTurn(currentRoom, currentRoom.getDemons());
             }
             CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
             fight(currentRoom, healthiestAdventurer,healthiestCreature);
@@ -99,13 +99,31 @@ public class Game {
             moveAdventurers(currentRoom);}
     }
 
-    private void demonTurn(Room currentRoom, List<AdventurerInterface> adventurers, List<CharacterInterface> demons) {
-        for (CharacterInterface demon : demons) {
-            for (AdventurerInterface adventurer : adventurers) {
+    private void demonTurn(Room currentRoom, List<CharacterInterface> demons) {
+
+        List<AdventurerInterface> adventurers = currentRoom.getAdventurers();
+        Iterator<AdventurerInterface> adventurerIterator = adventurers.iterator();
+        Iterator<CharacterInterface> demonIterator = demons.iterator();
+
+        while (adventurerIterator.hasNext()) {
+            AdventurerInterface adventurer = adventurerIterator.next();
+
+            while (demonIterator.hasNext()) {
+                CharacterInterface demon = demonIterator.next();
+
                 logger.info("{}(health: {}) is fighting with Demon {}(health: {})",
                         adventurer.getName(), adventurer.getHealth(), demon.getName(), demon.getHealth());
 
                 fight(currentRoom, adventurer, demon);
+
+                if (!currentRoom.getAdventurers().contains(adventurer)) {
+                    adventurerIterator = currentRoom.getAdventurers().iterator();
+                    break;
+                }
+                if (!currentRoom.getDemons().contains(demon)) {
+                    demonIterator = currentRoom.getDemons().iterator();
+                    break;
+                }
             }
         }
     }
