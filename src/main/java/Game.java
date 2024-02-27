@@ -47,7 +47,7 @@ public class Game {
         } else if (dimensions == 3) {
             init3x3MapEntities();
         }
-        else{logger.error("Invalid Dimensions");}
+        else{initNRoomsEntities(dimensions);}
     }
     public void init2x2MapEntities(){
         Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
@@ -65,6 +65,20 @@ public class Game {
             creatureStartingRoom.addCreature(creatures.get(i));
         }
     }
+    public void initNRoomsEntities(int n) {
+        // Initialize adventurers
+        for (int i = 0; i < adventurers.size(); i++) {
+            Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+            adventurerStartingRoom.addAdventurer(adventurers.get(i));
+        }
+
+        // Initialize creatures
+        for (int i = 0; i < creatures.size(); i++) {
+            Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
+            creatureStartingRoom.addCreature(creatures.get(i));
+        }
+    }
+
 
     //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {

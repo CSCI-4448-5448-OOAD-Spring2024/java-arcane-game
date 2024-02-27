@@ -10,6 +10,7 @@ public class ArcaneTest {
         Arcane arcaneTest = new Arcane();
         arcaneTest.runGame3X3Map();
         arcaneTest.runGame2X2Map();
+        arcaneTest.runGameNRooms(4);//hardcoded n=4 for now
         assertNotNull(arcaneTest);
     }
 }

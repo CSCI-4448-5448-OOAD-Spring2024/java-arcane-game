@@ -81,5 +81,51 @@ public class Arcane {
         String winner = arcane.announceWinner();
         logger.info(winner);
     }
+    public void runGameNRooms(int n) {
+        logger.info("Starting play...");
+        logger.info("Map Size: " + n + " rooms");
+
+        Maze maze = new Maze();
+        maze.initializeRooms(n);
+
+        Game arcane = new Game(maze);
+        double creatureHealth = 3.0;
+        double adventurerHealth = 5.0;
+
+        // Create adventurers
+        List<AdventurerInterface> adventurers = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            adventurers.add(new Adventurer("Player" + i, adventurerHealth));
+        }
+
+        // Create creatures
+        List<CharacterInterface> creatures = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            creatures.add(new Creature("Creature" + i, creatureHealth));
+        }
+        // Add a Demon for an extra challenge
+        creatures.add(new Demon("Demon", 15));
+
+        arcane.setEntities(adventurers, creatures);
+        arcane.initializeAdventurerCreaturePositions(n);
+
+        // Initialize food items
+        List<Food> food = new ArrayList<>();
+        food.add(new Food("Steak"));
+        food.add(new Food("Pasta"));
+        food.add(new Food("Milk"));
+        food.add(new Food("Chicken"));
+        food.add(new Food("Fish"));
+        food.add(new Food("Burrito"));
+        food.add(new Food("Eggs"));
+        food.add(new Food("Toast"));
+        food.add(new Food("Burger"));
+        food.add(new Food("Sushi"));
+        arcane.initFood(food);
+
+        arcane.playGame();
+        String winner = arcane.announceWinner();
+        logger.info(winner);
+    }
 
 }

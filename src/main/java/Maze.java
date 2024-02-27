@@ -16,6 +16,9 @@ public class Maze {
         } else if (dimensions == 3) {
             init3x3Maze();
         }
+        else{
+            runGameNRooms(dimensions);
+        }
     }
     public void init2x2Maze(){
 
@@ -71,4 +74,20 @@ public class Maze {
         roomsInMaze.add(SouthEastRoom);
 
     }
+    public void runGameNRooms(int numberOfRooms) {
+        // Create and add rooms to the maze
+        for (int i = 0; i < numberOfRooms; i++) {
+            Room newRoom = new Room("Room " + (i + 1));
+            roomsInMaze.add(newRoom);
+        }
+
+        for (Room room1 : roomsInMaze) {
+            for (Room room2 : roomsInMaze) {
+                if (room1 != room2) {
+                    room1.addNeighboringRoom(room2);
+                }
+            }
+        }
+    }
+
 }
