@@ -79,23 +79,52 @@ public class Game {
 
         for (Room currentRoom : roomsInMap) {
             if (currentRoom.isAdventurerPresent()) {
-                AdventurerTurn(currentRoom);
+                handleAdventurerTurns(currentRoom);
             }
         }
     }
-    public void AdventurerTurn(Room currentRoom){
-        AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(currentRoom.getAdventurers());
+
+    public void handleAdventurerTurns(Room currentRoom){
+
+        List<AdventurerInterface> knights = currentRoom.getKnights();
+        List<AdventurerInterface> cowards = currentRoom.getCowards();
+        List<AdventurerInterface> gluttons = currentRoom.getGluttons();
+        List<AdventurerInterface> adventurers = currentRoom.getNonSpecificAdventurers();
+
+        if(!knights.isEmpty()){
+            knightTurn(knights);
+        }
+        if(!cowards.isEmpty()){
+            cowardTurn(cowards);
+        }
+        if(!gluttons.isEmpty()){
+            gluttonTurn(gluttons);
+        }
+        if(!adventurers.isEmpty()){
+            AdventurerTurn(adventurers, currentRoom);
+        }
+    }
+
+    public void knightTurn(List<AdventurerInterface> knights){}
+    public void cowardTurn(List<AdventurerInterface> cowards){}
+    public void gluttonTurn(List<AdventurerInterface> gluttons){}
+    public void AdventurerTurn(List<AdventurerInterface> adventurers, Room currentRoom){
+        AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(adventurers);
 
         if (currentRoom.isCreaturePresent()) {
 
             if(currentRoom.hasDemons()) {
                 demonTurn(currentRoom, currentRoom.getDemons());
             }
-            CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getCreatures());
-            fight(currentRoom, healthiestAdventurer,healthiestCreature);
+            if(currentRoom.isNonDemonCreaturePresent()){
+                CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getNonDemonCreatures());
+                fight(currentRoom, healthiestAdventurer,healthiestCreature);
+            }
+
         } else {
             if(currentRoom.roomHasFood()){
-                healthiestAdventurer.eatFood(currentRoom);}
+                healthiestAdventurer.eatFood(currentRoom);
+            }
             moveAdventurers(currentRoom);}
     }
 
@@ -110,6 +139,7 @@ public class Game {
 
             while (demonIterator.hasNext()) {
                 CharacterInterface demon = demonIterator.next();
+
 
                 logger.info("{}(health: {}) is fighting with Demon {}(health: {})",
                         adventurer.getName(), adventurer.getHealth(), demon.getName(), demon.getHealth());
@@ -129,10 +159,10 @@ public class Game {
     }
 
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
-    private CharacterInterface findHealthiestCreature(List<CharacterInterface> entities){
+    private CharacterInterface findHealthiestCreature(List<CharacterInterface> creatures){
 
-        CharacterInterface healthiest = entities.get(0);
-        for(CharacterInterface character : entities){
+        CharacterInterface healthiest = creatures.get(0);
+        for(CharacterInterface character : creatures){
             if(character.getHealth() > healthiest.getHealth()){
                 healthiest = character;
             }
