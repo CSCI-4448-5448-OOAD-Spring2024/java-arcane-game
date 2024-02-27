@@ -106,22 +106,62 @@ public class Game {
         List<AdventurerInterface> adventurers = currentRoom.getNonSpecificAdventurers();
 
         if(!knights.isEmpty()){
-            knightTurn(knights);
+            knightTurn(knights, currentRoom);
         }
         if(!cowards.isEmpty()){
-            cowardTurn(cowards);
+            cowardTurn(cowards, currentRoom);
         }
         if(!gluttons.isEmpty()){
-            gluttonTurn(gluttons);
+            gluttonTurn(gluttons, currentRoom);
         }
         if(!adventurers.isEmpty()){
             AdventurerTurn(adventurers, currentRoom);
         }
     }
 
-    public void knightTurn(List<AdventurerInterface> knights){}
-    public void cowardTurn(List<AdventurerInterface> cowards){}
-    public void gluttonTurn(List<AdventurerInterface> gluttons){}
+    public void knightTurn(List<AdventurerInterface> knights,  Room currentRoom){
+        for (AdventurerInterface knight : knights) {
+            if (currentRoom.isCreaturePresent()) {
+                for (CharacterInterface creature : currentRoom.getCreatures()) {
+                    fight(currentRoom, knight, creature);
+                }
+            }
+        }
+    }
+    public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
+        for (AdventurerInterface coward : cowards) {
+            if (currentRoom.isCreaturePresent() && !currentRoom.hasDemons()) {
+                moveAdventurers(currentRoom);
+                coward.subtractHealth(0.5);
+            } else if (currentRoom.hasDemons()) {
+                for (CharacterInterface demon : currentRoom.getDemons()) {
+                    fight(currentRoom, coward, demon);
+                }
+            }
+            else{
+                moveAdventurers(currentRoom);
+            }
+        }
+    }
+
+    public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
+        for (AdventurerInterface glutton : gluttons) {
+            if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
+                glutton.eatFood(currentRoom);
+            } else if (currentRoom.hasDemons()) {
+                for (CharacterInterface demon : currentRoom.getDemons()) {
+                    fight(currentRoom, glutton, demon);
+                }
+            }
+            if(currentRoom.isNonDemonCreaturePresent()){
+                CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getNonDemonCreatures());
+                fight(currentRoom, glutton,healthiestCreature);
+            }
+            else{
+                moveAdventurers(currentRoom);
+            }
+        }
+    }
     public void AdventurerTurn(List<AdventurerInterface> adventurers, Room currentRoom){
         AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(adventurers);
 
