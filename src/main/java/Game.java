@@ -122,10 +122,20 @@ public class Game {
     public void knightTurn(List<AdventurerInterface> knights,  Room currentRoom){
         for (AdventurerInterface knight : knights) {
             if (currentRoom.isCreaturePresent()) {
-                for (CharacterInterface creature : currentRoom.getCreatures()) {
-                    fight(currentRoom, knight, creature);
+
+                if(currentRoom.hasDemons()) {
+                    demonTurn(currentRoom, currentRoom.getDemons());
                 }
-            }
+                if(currentRoom.isNonDemonCreaturePresent()){
+                    CharacterInterface healthiestCreature = findHealthiestCreature(currentRoom.getNonDemonCreatures());
+                    fight(currentRoom, knight,healthiestCreature);
+                }
+
+            } else {
+                if(currentRoom.roomHasFood()){
+                    knight.eatFood(currentRoom);
+                }
+                moveAdventurers(currentRoom);}
         }
     }
     public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
