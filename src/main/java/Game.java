@@ -150,6 +150,11 @@ public class Game {
             else{
                 moveAdventurers(currentRoom,cowards);
                 coward.subtractHealth(0.5);
+                if(!coward.isAlive()){
+                    currentRoom.removeAdventurer(coward);
+                    logger.info(coward.getName() + "(health: " + coward.getHealth() + "); has died while fleeing");
+                    adventurers.remove(coward);
+                }
             }
         }
     }
@@ -179,7 +184,7 @@ public class Game {
             if (currentRoom.isCreaturePresent()) {fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));}
         }
             if(currentRoom.roomHasFood()){healthiestAdventurer.eatFood(currentRoom);}
-            if(!currentRoom.hasDemons()) {
+            if(!currentRoom.isCreaturePresent()) {
                 moveAdventurers(currentRoom, currentRoom.getNonSpecificAdventurers());
             }
     }

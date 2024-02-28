@@ -12,20 +12,20 @@ public class Arcane {
         logger.info("Starting play...");
         logger.info("Map Size: 3x3");
 
-        Maze maze = new Maze();
-        maze.initializeRooms(3);
+        Maze maze = new Maze.Builder()
+                .create3x3Maze()
+                .build();
 
         Game arcane = new Game(maze);
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
 
-        List<AdventurerInterface> adventurers = Arrays.asList(new Coward("Arhut", adventurerHealth), new Adventurer("Player2", adventurerHealth));
+        List<AdventurerInterface> adventurers = Arrays.asList(new Coward("Arthur", adventurerHealth), new Adventurer("Player2", adventurerHealth));
         List<CharacterInterface> creatures = Arrays.asList(
                 new Creature("Creature1", creatureHealth),
                 new Creature("Creature2", creatureHealth),
                 new Creature("Creature3", creatureHealth),
                 new Creature("Creature4", creatureHealth),
-//                new Creature("Creature777", creatureHealth)
                 new Demon("Demon", 15)
         );
 
@@ -53,10 +53,13 @@ public class Arcane {
 
         logger.info("Starting play...");
         logger.info("Map Size: 2x2");
-        Maze maze = new Maze();
-        maze.initializeRooms(2);
+
+        Maze maze = new Maze.Builder()
+                .create2x2Maze()
+                .build();
 
         Game arcane = new Game(maze);
+
         double creatureHealth = 5.0;
         double adventurerHealth = 5.0;
 
@@ -85,8 +88,9 @@ public class Arcane {
         logger.info("Starting play...");
         logger.info("Map Size: " + n + " rooms");
 
-        Maze maze = new Maze();
-        maze.initializeRooms(n);
+        Maze maze = new Maze.Builder()
+                .createMazeNRooms(n)
+                .build();
 
         Game arcane = new Game(maze);
         double creatureHealth = 3.0;
