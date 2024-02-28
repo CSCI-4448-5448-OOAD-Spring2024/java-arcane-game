@@ -113,20 +113,15 @@ public class Game {
 
     }
     public void knightTurn(List<AdventurerInterface> knights,  Room currentRoom){
-
         for (AdventurerInterface knight : knights) {
             if (currentRoom.isCreaturePresent()) {
-
                 List<CharacterInterface> creaturesCopy = new ArrayList<>(currentRoom.getCreatures());
-
                 for (CharacterInterface creature : creaturesCopy) {
                     fight(currentRoom, knight, creature);
                 }
             }
         }
-        if(!currentRoom.hasDemons()){
-            moveAdventurers(currentRoom, currentRoom.getKnights());
-        }
+        if(!currentRoom.hasDemons()){moveAdventurers(currentRoom, currentRoom.getKnights());}
     }
     public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
 
@@ -147,7 +142,6 @@ public class Game {
             }
         }
     }
-
     public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
         for (AdventurerInterface glutton : gluttons) {
             if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
@@ -168,14 +162,10 @@ public class Game {
     }
     public void AdventurerTurn(List<AdventurerInterface> adventurers, Room currentRoom){
         AdventurerInterface healthiestAdventurer = findHealthiestAdventurer(adventurers);
-
         for(AdventurerInterface adventurer : adventurers){
-            if (currentRoom.isCreaturePresent()) {fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));}
-        }
+            if (currentRoom.isCreaturePresent()) {fight(currentRoom, adventurer, findHealthiestCreature(currentRoom.getCreatures()));}}
             if(currentRoom.roomHasFood()){healthiestAdventurer.eatFood(currentRoom);}
-            if(!currentRoom.isCreaturePresent()) {
-                moveAdventurers(currentRoom, currentRoom.getNonSpecificAdventurers());
-            }
+            if(!currentRoom.isCreaturePresent()) {moveAdventurers(currentRoom, currentRoom.getNonSpecificAdventurers());}
     }
 
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces

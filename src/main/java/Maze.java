@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Maze {
@@ -95,12 +96,11 @@ public class Maze {
             return this;
         }
         public Maze build() {
-//            validateMaze();
+            isValidMaze();
             Maze maze = new Maze();
             maze.roomsInMaze = new ArrayList<>(this.rooms);
             maze.adventurers = new ArrayList<>(this.adventurers);
             maze.creatures = new ArrayList<>(this.creatures);
-
             return maze;
         }
         public Builder initializeAdventurerCreaturePositions(int dimensions){
@@ -166,12 +166,36 @@ public class Maze {
             creatures.add(CreatureFactory.createDemon(name, health));
             return this;
         }
-
         public Builder addFood(String name) {
             Room roomForFood = rooms.get(new Random().nextInt(rooms.size()));
             roomForFood.addFood(FoodFactory.createFood(name));
             return this;
         }
-
+        public Builder addToRoom(AdventurerInterface adventurer, String roomName){
+            Room room = getRoomByName(roomName);
+            room.addAdventurer(adventurer);
+            adventurers.add(adventurer);
+            return this;
+        }
+        public Builder addToRoom(CharacterInterface creature, String roomName){
+            Room room = getRoomByName(roomName);
+            room.addCreature(creature);
+            creatures.add(creature);
+            return this;
+        }
+        public Room getRoomByName(String name){
+            for (Room room : rooms){
+                if(Objects.equals(room.getRoomName(), name)){return room;}
+            }
+            return rooms.get(0);
+        }
+        public boolean isValidMaze(){
+            for(Room room : rooms){
+                if(room.getNeighboringRooms().isEmpty()){
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

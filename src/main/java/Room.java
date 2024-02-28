@@ -79,14 +79,11 @@ public class Room {
                 .filter(character -> character instanceof Knight)
                 .collect(Collectors.toList());
     }
-
     public List<AdventurerInterface> getCowards() {
         return adventurers.stream()
                 .filter(character -> character instanceof Coward)
                 .collect(Collectors.toList());
     }
-
-
     public List<AdventurerInterface> getNonSpecificAdventurers() {
         return adventurers.stream()
                 .filter(adventurer ->
@@ -101,13 +98,11 @@ public class Room {
     public boolean isCreaturePresent() {
         return !creatures.isEmpty();
     }
-
     public List<CharacterInterface> getNonDemonCreatures() {
         return creatures.stream()
                 .filter(character -> !(character instanceof Demon))
                 .collect(Collectors.toList());
     }
-
     public boolean isNonDemonCreaturePresent(){
         return !getNonDemonCreatures().isEmpty();
     }
@@ -117,5 +112,4 @@ public class Room {
     public void removeCreature(CharacterInterface creature) {
         creatures.remove(creature);
     }
-
 }
