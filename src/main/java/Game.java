@@ -19,12 +19,8 @@ public class Game {
         this.maze = maze;
         this.roomsInMap = maze.getRooms();
         this.numberOfTurns = 0;
-        this.adventurers = new ArrayList<>();
-        this.creatures = new ArrayList<>();
-    }
-    public void setEntities(List<AdventurerInterface> adventurerList, List<CharacterInterface> creatureList){
-        this.adventurers = new ArrayList<>(adventurerList);
-        this.creatures = new ArrayList<>(creatureList);
+        this.adventurers = maze.getAdventurers();
+        this.creatures = maze.getCreatures();
     }
     public void initFood(List<Food> foodItems){
 
@@ -101,7 +97,6 @@ public class Game {
             }
         }
     }
-
     public void handleAdventurerTurns(Room currentRoom){
 
         List<AdventurerInterface> knights = currentRoom.getKnights();
@@ -215,7 +210,8 @@ public class Game {
     public boolean isGameOver() {
         boolean allAdventurersDead = adventurers.stream().allMatch(adventurer -> adventurer.getHealth() <= 0);
         boolean allCreaturesDead = creatures.stream().allMatch(creature -> creature.getHealth() <= 0);
-        return isOver = allAdventurersDead || allCreaturesDead;
+        isOver = allAdventurersDead || allCreaturesDead;
+        return isOver;
     }
     public void fight(Room currentRoom, CharacterInterface adventurer, CharacterInterface creature) {
 
@@ -255,7 +251,6 @@ public class Game {
             adventurers.remove(adventurer);
         }
     }
-
     public void displayGameStatus() {
 
         for (Room currentRoom : roomsInMap) {

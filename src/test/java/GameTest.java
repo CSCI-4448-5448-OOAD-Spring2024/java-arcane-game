@@ -10,12 +10,14 @@ public class GameTest {
     @Test
     public void TestGameConstructor(){
 
-        List<AdventurerInterface> testAdventurers = Arrays.asList(new Adventurer("Test Adventurer", 5.0));
-        List<CharacterInterface> testCreatures = Arrays.asList(new Creature("Test Creature", 3.0));
-        Maze maze = new Maze();
-        maze.initializeRooms(3);
+        Maze maze = new Maze.Builder()
+                .addAdventurer("Test Player1", 5.0)
+                .addCreature("Test Creature1", 3.0)
+                .create2x2Maze()
+                .initializeAdventurerCreaturePositions(2)
+                .build();
+
         Game testGame = new Game(maze);
-        testGame.setEntities(testAdventurers, testCreatures);
         assertFalse(testGame.isGameOver());
         assertEquals(0, testGame.getNumberOfTurns());
         assertEquals(maze.getRooms().size(), testGame.getRoomsInMap().size());

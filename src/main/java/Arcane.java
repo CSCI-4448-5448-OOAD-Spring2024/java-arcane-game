@@ -1,8 +1,6 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Arcane {
@@ -14,25 +12,18 @@ public class Arcane {
 
         Maze maze = new Maze.Builder()
                 .create3x3Maze()
+                .addCoward("Arthur", 5.0)
+                .addAdventurer("Player2", 5.0)
+                .addCreature("Creature1", 3.0)
+                .addCreature("Creature2", 3.0)
+                .addCreature( "Creature3", 3.0)
+                .addCreature( "Creature4", 3.0)
+                .addDemon( "Demon", 15.0)
+                .initializeAdventurerCreaturePositions(3)
                 .build();
 
         Game arcane = new Game(maze);
-        double creatureHealth = 3.0;
-        double adventurerHealth = 5.0;
 
-        List<AdventurerInterface> adventurers = Arrays.asList(new Coward("Arthur", adventurerHealth), new Adventurer("Player2", adventurerHealth));
-        List<CharacterInterface> creatures = Arrays.asList(
-                new Creature("Creature1", creatureHealth),
-                new Creature("Creature2", creatureHealth),
-                new Creature("Creature3", creatureHealth),
-                new Creature("Creature4", creatureHealth),
-                new Demon("Demon", 15)
-        );
-
-
-
-        arcane.setEntities(adventurers, creatures);
-        arcane.initializeAdventurerCreaturePositions(3);
         List<Food> food =new ArrayList<Food>();
         food.add(new Food("Steak"));
         food.add(new Food("Pasta"));
@@ -55,19 +46,14 @@ public class Arcane {
         logger.info("Map Size: 2x2");
 
         Maze maze = new Maze.Builder()
+                .addAdventurer("Player1", 5.0)
+                .addCreature("Creature1", 3.0)
                 .create2x2Maze()
+                .initializeAdventurerCreaturePositions(2)
                 .build();
 
         Game arcane = new Game(maze);
 
-        double creatureHealth = 5.0;
-        double adventurerHealth = 5.0;
-
-        List<AdventurerInterface> adventurers = Arrays.asList(new Adventurer("Player1", adventurerHealth));
-        List<CharacterInterface> creatures = Arrays.asList(new Creature("Creature1", creatureHealth));
-
-        arcane.setEntities(adventurers, creatures);
-        arcane.initializeAdventurerCreaturePositions(2);
         List<Food> food =new ArrayList<Food>();
         food.add(new Food("Steak"));
         food.add(new Food("Pasta"));
@@ -88,31 +74,24 @@ public class Arcane {
         logger.info("Starting play...");
         logger.info("Map Size: " + n + " rooms");
 
-        Maze maze = new Maze.Builder()
-                .createMazeNRooms(n)
-                .build();
-
-        Game arcane = new Game(maze);
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
 
-        List<AdventurerInterface> adventurers = Arrays.asList(
-                new Coward("Arthur", adventurerHealth),
-                new Adventurer("Aventurer1", adventurerHealth),
-                new Knight("Ainsley", adventurerHealth),
-                new Glutton("Glutton", adventurerHealth)
-        );
 
-        List<CharacterInterface> creatures = Arrays.asList(
-                new Creature("Creature1", creatureHealth),
-                new Creature("Creature2", creatureHealth),
-                new Creature("Creature3", creatureHealth),
-                new Creature("Creature4", creatureHealth),
-                new Demon("Demon", 15)
-        );
+        Maze maze = new Maze.Builder()
+                .addCoward("Arthur", adventurerHealth)
+                .addAdventurer("Aventurer1", adventurerHealth)
+                .addKnight("Ainsley", adventurerHealth)
+                .addGlutton("Glutton", adventurerHealth)
+                .addCreature("Creature1", creatureHealth)
+                .addCreature("Creature2", creatureHealth)
+                .addCreature("Creature3", creatureHealth)
+                .addDemon("Demon", 15)
+                .createMazeNRooms(n)
+                .initializeAdventurerCreaturePositions(n)
+                .build();
 
-        arcane.setEntities(adventurers, creatures);
-        arcane.initializeAdventurerCreaturePositions(n);
+        Game arcane = new Game(maze);
 
         List<Food> food = new ArrayList<>();
         food.add(new Food("Steak"));
