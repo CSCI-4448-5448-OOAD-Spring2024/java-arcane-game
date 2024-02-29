@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Room {
     private String name;
@@ -56,11 +57,53 @@ public class Room {
     public List<CharacterInterface> getCreatures() {
         return creatures;
     }
+
+    public List<CharacterInterface> getDemons() {
+        return creatures.stream()
+                .filter(character -> character instanceof Demon)
+                .collect(Collectors.toList());
+    }
+
+    public boolean hasDemons(){
+        return !getDemons().isEmpty();
+    }
+
+    public List<AdventurerInterface> getGluttons() {
+        return adventurers.stream()
+                .filter(character -> character instanceof Glutton)
+                .collect(Collectors.toList());
+    }
+    public List<AdventurerInterface> getKnights() {
+        return adventurers.stream()
+                .filter(character -> character instanceof Knight)
+                .collect(Collectors.toList());
+    }
+    public List<AdventurerInterface> getCowards() {
+        return adventurers.stream()
+                .filter(character -> character instanceof Coward)
+                .collect(Collectors.toList());
+    }
+    public List<AdventurerInterface> getNonSpecificAdventurers() {
+        return adventurers.stream()
+                .filter(adventurer ->
+                        !(adventurer instanceof Glutton) &&
+                                !(adventurer instanceof Coward) &&
+                                !(adventurer instanceof Knight))
+                .collect(Collectors.toList());
+    }
     public boolean isAdventurerPresent() {
         return !adventurers.isEmpty();
     }
     public boolean isCreaturePresent() {
         return !creatures.isEmpty();
+    }
+    public List<CharacterInterface> getNonDemonCreatures() {
+        return creatures.stream()
+                .filter(character -> !(character instanceof Demon))
+                .collect(Collectors.toList());
+    }
+    public boolean isNonDemonCreaturePresent(){
+        return !getNonDemonCreatures().isEmpty();
     }
     public void removeAdventurer(CharacterInterface adventurer) {
         adventurers.remove(adventurer);
@@ -68,5 +111,4 @@ public class Room {
     public void removeCreature(CharacterInterface creature) {
         creatures.remove(creature);
     }
-
 }

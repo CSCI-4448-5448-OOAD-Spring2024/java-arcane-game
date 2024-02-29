@@ -1,10 +1,8 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
 public class Adventurer implements CharacterInterface, AdventurerInterface{
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private String name;
@@ -21,7 +19,6 @@ public class Adventurer implements CharacterInterface, AdventurerInterface{
         return health;
     }
     public void subtractHealth(double val){this.health -= val;}
-
     public boolean isAlive(){
         return this.getHealth() > 0;
     }
@@ -41,6 +38,5 @@ public class Adventurer implements CharacterInterface, AdventurerInterface{
             }
         }
     }
-
     public void addHealth(int val){this.health +=val;}
 }
