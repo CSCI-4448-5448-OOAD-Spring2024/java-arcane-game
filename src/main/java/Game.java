@@ -31,43 +31,7 @@ public class Game {
     public List<Room> getRoomsInMap(){
         return roomsInMap;
     }
-    public void initializeAdventurerCreaturePositions(int dimensions){
-        if(dimensions == 2) {
-            init2x2MapEntities();
-        } else if (dimensions == 3) {
-            init3x3MapEntities();
-        }
-        else{initNRoomsEntities(dimensions);}
-    }
-    public void init2x2MapEntities(){
-        Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-        Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-        adventurerStartingRoom.addAdventurer(adventurers.get(0));
-        creatureStartingRoom.addCreature(creatures.get(0));
-    }
-    public void init3x3MapEntities(){
-        for(int i = 0; i < 2; i++){
-            Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-            adventurerStartingRoom.addAdventurer(adventurers.get(i));
-        }
-        for(int i = 0; i < 5; i++){
-            Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-            creatureStartingRoom.addCreature(creatures.get(i));
-        }
-    }
-    public void initNRoomsEntities(int n) {
-        // Initialize adventurers
-        for (int i = 0; i < adventurers.size(); i++) {
-            Room adventurerStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-            adventurerStartingRoom.addAdventurer(adventurers.get(i));
-        }
 
-        // Initialize creatures
-        for (int i = 0; i < creatures.size(); i++) {
-            Room creatureStartingRoom = roomsInMap.get(new Random().nextInt(roomsInMap.size()));
-            creatureStartingRoom.addCreature(creatures.get(i));
-        }
-    }
     //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {
         while (!isGameOver()) {

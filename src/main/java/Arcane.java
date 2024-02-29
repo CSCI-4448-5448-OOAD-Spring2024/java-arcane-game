@@ -106,4 +106,30 @@ public class Arcane {
         logger.info(winner);
     }
 
+
+    public void runGameParser(int numberOfRooms, int numberOfAdventurers, int numberOfCreatures, int numberOfFoodItems) {
+        logger.info("Starting play...");
+        logger.info("Map Size: {} rooms", numberOfRooms);
+
+        Maze.Builder mazeBuilder = new Maze.Builder().createMazeNRooms(numberOfRooms);
+
+        for (int i = 0; i < numberOfAdventurers; i++) {
+            mazeBuilder.addAdventurer("Adventurer " + (i + 1), 5.0);
+        }
+
+        for (int i = 0; i < numberOfCreatures; i++) {
+            mazeBuilder.addCreature("Creature " + (i + 1), 3.0);
+        }
+
+        for (int i = 0; i < numberOfFoodItems; i++) {
+            mazeBuilder.addFood("Food " + (i + 1));
+        }
+
+        Maze maze = mazeBuilder.initializeAdventurerCreaturePositions(numberOfRooms).build();
+
+        Game arcane = new Game(maze);
+        arcane.playGame();
+        String winner = arcane.announceWinner();
+        logger.info(winner);
+    }
 }
