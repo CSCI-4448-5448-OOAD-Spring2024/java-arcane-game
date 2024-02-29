@@ -73,7 +73,6 @@ public class Room {
                 .filter(character -> character instanceof Glutton)
                 .collect(Collectors.toList());
     }
-
     public List<AdventurerInterface> getKnights() {
         return adventurers.stream()
                 .filter(character -> character instanceof Knight)
