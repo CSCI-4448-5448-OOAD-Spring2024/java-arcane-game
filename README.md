@@ -1,4 +1,4 @@
-# Homework4 ARCANE-Adding Factory and Builder Patterns
+# Homework5 ARCANE-Adding the Observer, Adaptor, and Singleton Patterns and BDD
 
 Team Members:
 
