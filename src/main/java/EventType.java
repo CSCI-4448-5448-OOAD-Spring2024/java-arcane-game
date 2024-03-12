@@ -1,0 +1,7 @@
+public enum EventType {
+    ADVENTURER_KILLED,
+    CREATURE_KILLED,
+    ADVENTURER_ATE,
+    TURN_ENDED,
+    GAME_OVER
+}

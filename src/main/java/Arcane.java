@@ -1,12 +1,16 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Arcane {
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
+    private final EventBus eventBus;
+
+    public Arcane() {
+        this.eventBus = EventBus.getInstance();
+    }
     public void runGame3X3Map(){
 
+        attachObservers();
         logger.info("Starting play...");
         logger.info("Map Size: 3x3");
 
@@ -38,9 +42,11 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
+        removeAllObservers();
     }
     public void runGame2X2Map(){
 
+        attachObservers();
         logger.info("Starting play...");
         logger.info("Map Size: 2x2");
 
@@ -66,14 +72,17 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
+        removeAllObservers();
+
     }
     public void runGameNRooms(int n) {
+        attachObservers();
+
         logger.info("Starting play...");
         logger.info("Map Size: " + n + " rooms");
 
         double creatureHealth = 3.0;
         double adventurerHealth = 5.0;
-
 
         Maze maze = new Maze.Builder()
                 .addCoward("Arthur", adventurerHealth)
@@ -104,10 +113,26 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
+        removeAllObservers();
+
     }
 
-
+    private void attachObservers() {
+        eventBus.attach(new Observer(), EventType.ADVENTURER_KILLED);
+        eventBus.attach(new Observer(), EventType.CREATURE_KILLED);
+        eventBus.attach(new Observer(), EventType.ADVENTURER_ATE);
+        eventBus.attach(new Observer(), EventType.TURN_ENDED);
+        eventBus.attach(new Observer(), EventType.GAME_OVER);
+    }
+    public void removeAllObservers(){
+        for (EventType eventType : EventType.values()) {
+            eventBus.removeObservers(eventType);
+        }
+    }
     public void runGameParser(int numberOfRooms, int numberOfAdventurers, int numberOfCreatures, int numberOfFoodItems) {
+
+        attachObservers();
+
         logger.info("Starting play...");
         logger.info("Map Size: {} rooms", numberOfRooms);
 
@@ -131,5 +156,7 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
+        removeAllObservers();
+
     }
 }

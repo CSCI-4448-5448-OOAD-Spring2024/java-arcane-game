@@ -7,10 +7,12 @@ public class Adventurer implements CharacterInterface, AdventurerInterface{
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private String name;
     private double health;
+    private final EventBus eventBus;
     public Adventurer(String name, double health){
 
         this.name = name;
         this.health = health;
+        this.eventBus = EventBus.getInstance();
     }
     public String getName(){
         return name;
@@ -31,6 +33,7 @@ public class Adventurer implements CharacterInterface, AdventurerInterface{
 
         for (Food food : foodInRoom) {
             for (AdventurerInterface adventurer : adventurersInRoom) {
+                eventBus.postMessage(EventType.ADVENTURER_ATE, adventurer.getName() + " has eaten.");
                 adventurer.addHealth(1);
                 logger.info("{}(health: {}) just ate {}", adventurer.getName(), adventurer.getHealth(), food.getFoodName());
                 room.removeFood(food);

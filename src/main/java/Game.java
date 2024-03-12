@@ -1,3 +1,4 @@
+import jdk.jfr.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ public class Game {
     private int numberOfTurns;
     private List<AdventurerInterface> adventurers;
     private List<CharacterInterface> creatures;
+    private final EventBus eventBus;
     public Game(Maze maze) { //Example of dependency injection through constructor
         this.isOver = false;
         this.maze = maze;
@@ -21,8 +23,9 @@ public class Game {
         this.numberOfTurns = 0;
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
-    }
+        this.eventBus = EventBus.getInstance();
 
+    }
     public int getNumberOfTurns() {
         return numberOfTurns;
     }
@@ -54,6 +57,9 @@ public class Game {
                 adventurersToProcess.removeAll(adventurersInRoom);
             }
         }
+
+        eventBus.postMessage(EventType.TURN_ENDED, "turn ended");
+
     }
     public void handleAdventurerTurns(Room currentRoom){
 
@@ -99,6 +105,7 @@ public class Game {
                 moveAdventurers(currentRoom,cowards);
                 coward.subtractHealth(0.5);
                 if(!coward.isAlive()){
+                    eventBus.postMessage(EventType.ADVENTURER_KILLED, coward.getName() + " has been killed.");
                     currentRoom.removeAdventurer(coward);
                     logger.info(coward.getName() + "(health: " + coward.getHealth() + "); has died while fleeing");
                     adventurers.remove(coward);
@@ -131,7 +138,6 @@ public class Game {
             if(currentRoom.roomHasFood()){healthiestAdventurer.eatFood(currentRoom);}
             if(!currentRoom.isCreaturePresent()) {moveAdventurers(currentRoom, currentRoom.getNonSpecificAdventurers());}
     }
-
     //Example of polymorphism: findHealthiest functions achieve same functionality with different objects with common interfaces
     private CharacterInterface findHealthiestCreature(List<CharacterInterface> creatures){
 
@@ -188,11 +194,13 @@ public class Game {
     public void handleCreatureAdventurerDeath(CharacterInterface adventurer, CharacterInterface creature,Room currentRoom){
 
         if(!creature.isAlive()){
+            eventBus.postMessage(EventType.CREATURE_KILLED, creature.getName() + " has been killed.");
             currentRoom.removeCreature(creature);
             logger.info(creature.getName() + "(health: " + creature.getHealth() + "); DEAD was killed");
             creatures.remove(creature);
         }
         if(!adventurer.isAlive()){
+            eventBus.postMessage(EventType.ADVENTURER_KILLED, adventurer.getName() + " has been killed.");
             currentRoom.removeAdventurer(adventurer);
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD was killed");
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD lost to Creature " + creature.getName()+ "(health: " + creature.getHealth() + ")");
@@ -236,14 +244,17 @@ public class Game {
     }
     public String announceWinner(){
 
+        eventBus.postMessage(EventType.GAME_OVER, "game over");
         if(adventurers.isEmpty()){
             return "Boo, the Creatures Won! \n";
         }
         else if(creatures.isEmpty()){
             return "Adventurers Won! \n";
         }
+
         return "Draw";
     }
+
 }
 
 
