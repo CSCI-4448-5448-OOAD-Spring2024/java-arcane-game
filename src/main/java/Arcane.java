@@ -126,11 +126,6 @@ public class Arcane {
         eventBus.attach(new Observer(), EventType.GAME_OVER);
         AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(this, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 2);
 
-        eventBus.attach(audibleObserver, EventType.ADVENTURER_KILLED);
-        eventBus.attach(audibleObserver, EventType.CREATURE_KILLED);
-        eventBus.attach(audibleObserver, EventType.ADVENTURER_ATE);
-        eventBus.attach(audibleObserver, EventType.TURN_ENDED);
-        eventBus.attach(audibleObserver, EventType.GAME_OVER);
     }
     public void removeAllObservers(){
         for (EventType eventType : EventType.values()) {
