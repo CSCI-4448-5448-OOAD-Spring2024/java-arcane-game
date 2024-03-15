@@ -20,11 +20,11 @@ public class AudibleArcaneObserver implements IObserver {
             try {
 
                 //MAC IMPLEMENTATION
-                String[] cmd = {"say", eventDescription};
-                Runtime.getRuntime().exec(cmd);
+//                String[] cmd = {"say", eventDescription};
+//                Runtime.getRuntime().exec(cmd);
 
                //WINDOWS IMPLEMENTATION
-//                Runtime.getRuntime().exec("nircmd.exe speak text \"" + eventDescription + "\"");
+                Runtime.getRuntime().exec("nircmd.exe speak text \"" + eventDescription + "\"");
 
 
                 Thread.sleep(delayInSeconds * 1000);
