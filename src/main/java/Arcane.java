@@ -50,7 +50,7 @@ public class Arcane {
     }
     public void runGame2X2Map(){
 
-//        attachObservers();
+        attachObservers();
 
         logger.info("Starting play...");
         logger.info("Map Size: 2x2");
@@ -121,12 +121,16 @@ public class Arcane {
         logger.info(winner);
 
     }
-    private void attachObservers() {
+    public void attachObservers() {
         eventBus.attach(new Observer(), EventType.ADVENTURER_KILLED);
         eventBus.attach(new Observer(), EventType.CREATURE_KILLED);
         eventBus.attach(new Observer(), EventType.ADVENTURER_ATE);
         eventBus.attach(new Observer(), EventType.TURN_ENDED);
         eventBus.attach(new Observer(), EventType.GAME_OVER);
+
+        List<EventType> audibleEvents = List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER);
+        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(this, audibleEvents, 4);
+        eventBus.attach(audibleObserver, EventType.ALL);
 
     }
     public void removeAllObservers(){

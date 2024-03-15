@@ -3,5 +3,6 @@ public enum EventType {
     CREATURE_KILLED,
     ADVENTURER_ATE,
     TURN_ENDED,
-    GAME_OVER
+    GAME_OVER,
+    ALL
 }

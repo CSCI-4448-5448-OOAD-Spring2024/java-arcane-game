@@ -20,7 +20,15 @@ public class EventBus {
         return instance;
     }
     public void attach(IObserver observer, EventType eventType) {
-        observers.get(eventType).add(observer);
+        if (eventType == EventType.ALL) {
+            for (EventType type : EventType.values()) {
+                if (type != EventType.ALL) {  //
+                    observers.get(type).add(observer);
+                }
+            }
+        } else {
+            observers.get(eventType).add(observer);
+        }
     }
     public void postMessage(EventType eventType, String eventDescription) {
         for (IObserver observer : observers.get(eventType)) {

@@ -26,7 +26,6 @@ public class Game implements IMazeSubject, IObserver{
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
         this.observers = new ArrayList<>();
-//        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(this, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 4);
 
     }
     @Override
@@ -44,13 +43,9 @@ public class Game implements IMazeSubject, IObserver{
     public int getNumberOfTurns() {
         return numberOfTurns;
     }
-
-    //Example of encapsulation: instead of accessing rooms directly, must use a method
     public List<Room> getRoomsInMap(){
         return roomsInMap;
     }
-
-    //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {
 
         notifyObservers("begin game");
@@ -135,7 +130,6 @@ public class Game implements IMazeSubject, IObserver{
             }
         }
     }
-
     public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
         for (AdventurerInterface glutton : gluttons) {
             if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
@@ -281,7 +275,6 @@ public class Game implements IMazeSubject, IObserver{
         EventBus.getInstance().postMessage(EventType.GAME_OVER, "game over, draw");
         return "Draw";
     }
-
     @Override
     public void update(EventType eventType, String eventDescription) {
 
