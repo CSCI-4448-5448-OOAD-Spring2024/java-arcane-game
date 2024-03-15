@@ -26,7 +26,6 @@ public class Game implements IMazeSubject, IObserver{
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
         this.observers = new ArrayList<>();
-
     }
     @Override
     public void attach(IMazeObserver observer) {
