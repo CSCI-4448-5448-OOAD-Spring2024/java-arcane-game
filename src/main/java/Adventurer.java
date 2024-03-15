@@ -33,7 +33,7 @@ public class Adventurer implements CharacterInterface, AdventurerInterface{
 
         for (Food food : foodInRoom) {
             for (AdventurerInterface adventurer : adventurersInRoom) {
-                eventBus.postMessage(EventType.ADVENTURER_ATE, adventurer.getName() + " has eaten.");
+                eventBus.postMessage(EventType.ADVENTURER_ATE, adventurer.getName() + " has eaten " + food.getFoodName() + " and their health is " + adventurer.getHealth());
                 adventurer.addHealth(1);
                 logger.info("{}(health: {}) just ate {}", adventurer.getName(), adventurer.getHealth(), food.getFoodName());
                 room.removeFood(food);

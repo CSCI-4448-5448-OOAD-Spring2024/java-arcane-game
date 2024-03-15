@@ -16,6 +16,15 @@ public class Maze {
     public List<Room> getRooms(){
         return roomsInMaze;
     }
+
+    public Room getRoomByName(String name) {
+        for (Room room : roomsInMaze) {
+            if (Objects.equals(room.getRoomName(), name)) {
+                return room;
+            }
+        }
+        return null;
+    }
     public List<AdventurerInterface> getAdventurers(){return adventurers;}
     public List<CharacterInterface> getCreatures(){return creatures;}
 
@@ -95,6 +104,7 @@ public class Maze {
             }
             return this;
         }
+
         public Maze build() {
             isValidMaze();
             Maze maze = new Maze();

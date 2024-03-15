@@ -11,6 +11,7 @@ public class ArcaneTest {
         arcaneTest.runGame2X2Map();
         arcaneTest.runGameNRooms(5);
         assertNotNull(arcaneTest);
+
     }
     @Test
     public void testMazeBuilder(){

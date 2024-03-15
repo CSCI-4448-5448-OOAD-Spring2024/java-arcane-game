@@ -1,4 +1,6 @@
-import jdk.jfr.Event;
+import csci.ooad.layout.IMaze;
+import csci.ooad.layout.IMazeObserver;
+import csci.ooad.layout.IMazeSubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +9,7 @@ import java.util.*;
 //https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
 //https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 
-public class Game {
+public class Game implements IMazeSubject{
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private boolean isOver;
     private final List<Room> roomsInMap;
@@ -16,6 +18,7 @@ public class Game {
     private List<AdventurerInterface> adventurers;
     private List<CharacterInterface> creatures;
     private final EventBus eventBus;
+    private List<IMazeObserver> observers;
     public Game(Maze maze) { //Example of dependency injection through constructor
         this.isOver = false;
         this.maze = maze;
@@ -24,7 +27,22 @@ public class Game {
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
         this.eventBus = EventBus.getInstance();
+        this.observers = new ArrayList<>();
+    }
 
+    @Override
+    public void attach(IMazeObserver observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers(String statusMessage) {
+        for (IMazeObserver observer : observers) {
+            observer.update(getMaze(), statusMessage);
+        }
+    }
+
+    public IMaze getMaze() {
+        return new MazeAdapter(maze);
     }
     public int getNumberOfTurns() {
         return numberOfTurns;
@@ -37,6 +55,8 @@ public class Game {
 
     //Example of cohesion: playGame and doTurn work together for proper game functionality
     public void playGame() {
+
+        notifyObservers("begin game");
         while (!isGameOver()) {
             doTurn();
         }
@@ -58,8 +78,8 @@ public class Game {
             }
         }
 
-        eventBus.postMessage(EventType.TURN_ENDED, "turn ended");
-
+        eventBus.postMessage(EventType.TURN_ENDED, "turn " + numberOfTurns + " ended");
+        notifyObservers("turn " + numberOfTurns + " ended");
     }
     public void handleAdventurerTurns(Room currentRoom){
 
@@ -93,26 +113,32 @@ public class Game {
         }
         if(!currentRoom.hasDemons()){moveAdventurers(currentRoom, currentRoom.getKnights());}
     }
-    public void cowardTurn(List<AdventurerInterface> cowards,  Room currentRoom){
-
-        for(AdventurerInterface coward : cowards){
-            if(currentRoom.hasDemons()){
-                for (CharacterInterface demon : currentRoom.getDemons()) {
-                    fight(currentRoom, coward, demon);
+    public void cowardTurn(List<AdventurerInterface> cowards, Room currentRoom){
+        Iterator<AdventurerInterface> iterator = cowards.iterator();
+        while(iterator.hasNext()){
+            AdventurerInterface coward = iterator.next();
+            if(coward.isAlive()){
+                if(currentRoom.hasDemons()){
+                    for (CharacterInterface demon : currentRoom.getDemons()) {
+                        fight(currentRoom, coward, demon);
+                    }
                 }
-            }
-            else{
-                moveAdventurers(currentRoom,cowards);
-                coward.subtractHealth(0.5);
-                if(!coward.isAlive()){
-                    eventBus.postMessage(EventType.ADVENTURER_KILLED, coward.getName() + " has been killed.");
-                    currentRoom.removeAdventurer(coward);
-                    logger.info(coward.getName() + "(health: " + coward.getHealth() + "); has died while fleeing");
-                    adventurers.remove(coward);
+                else{
+                    moveAdventurers(currentRoom, Collections.singletonList(coward));
+                    coward.subtractHealth(0.5);
+                    if(!coward.isAlive()){
+                        eventBus.postMessage(EventType.ADVENTURER_KILLED, coward.getName() + " has been killed.");
+                        notifyObservers(coward.getName() + " has been killed.");
+                        currentRoom.removeAdventurer(coward);
+                        logger.info(coward.getName() + "(health: " + coward.getHealth() + "); has died while fleeing");
+                        iterator.remove(); // Remove the coward from the list of cowards
+                        adventurers.remove(coward);
+                    }
                 }
             }
         }
     }
+
     public void gluttonTurn(List<AdventurerInterface> gluttons,  Room currentRoom){
         for (AdventurerInterface glutton : gluttons) {
             if (currentRoom.roomHasFood() && !currentRoom.hasDemons()) {
@@ -195,12 +221,14 @@ public class Game {
 
         if(!creature.isAlive()){
             eventBus.postMessage(EventType.CREATURE_KILLED, creature.getName() + " has been killed.");
+            notifyObservers(creature.getName() + " has been killed.");
             currentRoom.removeCreature(creature);
             logger.info(creature.getName() + "(health: " + creature.getHealth() + "); DEAD was killed");
             creatures.remove(creature);
         }
         if(!adventurer.isAlive()){
             eventBus.postMessage(EventType.ADVENTURER_KILLED, adventurer.getName() + " has been killed.");
+            notifyObservers(adventurer.getName() + " has been killed.");
             currentRoom.removeAdventurer(adventurer);
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD was killed");
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD lost to Creature " + creature.getName()+ "(health: " + creature.getHealth() + ")");
@@ -243,15 +271,17 @@ public class Game {
         return new Random().nextInt(6) + 1;
     }
     public String announceWinner(){
+        notifyObservers("game over");
 
-        eventBus.postMessage(EventType.GAME_OVER, "game over");
         if(adventurers.isEmpty()){
+            eventBus.postMessage(EventType.GAME_OVER, "game over, creatures won");
             return "Boo, the Creatures Won! \n";
         }
         else if(creatures.isEmpty()){
+            eventBus.postMessage(EventType.GAME_OVER, "game over, adventurers won");
             return "Adventurers Won! \n";
         }
-
+        eventBus.postMessage(EventType.GAME_OVER, "game over, draw");
         return "Draw";
     }
 
