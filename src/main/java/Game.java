@@ -9,7 +9,7 @@ import java.util.*;
 //https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
 //https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 
-public class Game implements IMazeSubject{
+public class Game implements IMazeSubject, IObserver{
     private static final Logger logger = LoggerFactory.getLogger("csci.ooad.arcane.Arcane");
     private boolean isOver;
     private final List<Room> roomsInMap;
@@ -17,7 +17,6 @@ public class Game implements IMazeSubject{
     private int numberOfTurns;
     private List<AdventurerInterface> adventurers;
     private List<CharacterInterface> creatures;
-    private final EventBus eventBus;
     private List<IMazeObserver> observers;
     public Game(Maze maze) { //Example of dependency injection through constructor
         this.isOver = false;
@@ -26,7 +25,6 @@ public class Game implements IMazeSubject{
         this.numberOfTurns = 0;
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
-        this.eventBus = EventBus.getInstance();
         this.observers = new ArrayList<>();
     }
 
@@ -78,7 +76,7 @@ public class Game implements IMazeSubject{
             }
         }
 
-        eventBus.postMessage(EventType.TURN_ENDED, "turn " + numberOfTurns + " ended");
+        EventBus.getInstance().postMessage(EventType.TURN_ENDED, "turn " + numberOfTurns + " ended");
         notifyObservers("turn " + numberOfTurns + " ended");
     }
     public void handleAdventurerTurns(Room currentRoom){
@@ -127,7 +125,7 @@ public class Game implements IMazeSubject{
                     moveAdventurers(currentRoom, Collections.singletonList(coward));
                     coward.subtractHealth(0.5);
                     if(!coward.isAlive()){
-                        eventBus.postMessage(EventType.ADVENTURER_KILLED, coward.getName() + " has been killed.");
+                        EventBus.getInstance().postMessage(EventType.ADVENTURER_KILLED, coward.getName() + " has been killed.");
                         notifyObservers(coward.getName() + " has been killed.");
                         currentRoom.removeAdventurer(coward);
                         logger.info(coward.getName() + "(health: " + coward.getHealth() + "); has died while fleeing");
@@ -220,14 +218,14 @@ public class Game implements IMazeSubject{
     public void handleCreatureAdventurerDeath(CharacterInterface adventurer, CharacterInterface creature,Room currentRoom){
 
         if(!creature.isAlive()){
-            eventBus.postMessage(EventType.CREATURE_KILLED, creature.getName() + " has been killed.");
+            EventBus.getInstance().postMessage(EventType.CREATURE_KILLED, creature.getName() + " has been killed.");
             notifyObservers(creature.getName() + " has been killed.");
             currentRoom.removeCreature(creature);
             logger.info(creature.getName() + "(health: " + creature.getHealth() + "); DEAD was killed");
             creatures.remove(creature);
         }
         if(!adventurer.isAlive()){
-            eventBus.postMessage(EventType.ADVENTURER_KILLED, adventurer.getName() + " has been killed.");
+            EventBus.getInstance().postMessage(EventType.ADVENTURER_KILLED, adventurer.getName() + " has been killed.");
             notifyObservers(adventurer.getName() + " has been killed.");
             currentRoom.removeAdventurer(adventurer);
             logger.info(adventurer.getName() + "(health: " + adventurer.getHealth() + "); DEAD was killed");
@@ -274,17 +272,21 @@ public class Game implements IMazeSubject{
         notifyObservers("game over");
 
         if(adventurers.isEmpty()){
-            eventBus.postMessage(EventType.GAME_OVER, "game over, creatures won");
+            EventBus.getInstance().postMessage(EventType.GAME_OVER, "game over, creatures won");
             return "Boo, the Creatures Won! \n";
         }
         else if(creatures.isEmpty()){
-            eventBus.postMessage(EventType.GAME_OVER, "game over, adventurers won");
+            EventBus.getInstance().postMessage(EventType.GAME_OVER, "game over, adventurers won");
             return "Adventurers Won! \n";
         }
-        eventBus.postMessage(EventType.GAME_OVER, "game over, draw");
+        EventBus.getInstance().postMessage(EventType.GAME_OVER, "game over, draw");
         return "Draw";
     }
 
+    @Override
+    public void update(EventType eventType, String eventDescription) {
+
+    }
 }
 
 
