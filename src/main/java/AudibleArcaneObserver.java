@@ -5,8 +5,8 @@ public class AudibleArcaneObserver implements IObserver {
     private List<EventType> interestingEvents;
     private Integer delayInSeconds;
 
-    public AudibleArcaneObserver(Arcane arcaneGame, List<EventType> interestingEvents, Integer delayInSeconds) {
-        this.arcaneGame = arcaneGame;
+    public AudibleArcaneObserver(Arcane game, List<EventType> interestingEvents, Integer delayInSeconds) {
+        this.arcaneGame = game;
         this.interestingEvents = interestingEvents;
         this.delayInSeconds = delayInSeconds;
         for (EventType eventType : interestingEvents) {
@@ -19,7 +19,6 @@ public class AudibleArcaneObserver implements IObserver {
         if (interestingEvents.contains(eventType)) {
             try {
 
-//                implementation for both mac and windows, re-comment as needed
                 //MAC IMPLEMENTATION
                 String[] cmd = {"say", eventDescription};
                 Runtime.getRuntime().exec(cmd);

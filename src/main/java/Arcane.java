@@ -12,6 +12,7 @@ public class Arcane {
 
     public Arcane() {
         this.eventBus = EventBus.getInstance();
+
     }
     public void runGame3X3Map(){
 
@@ -44,6 +45,7 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
+        removeAllObservers();
 
     }
     public void runGame2X2Map(){
@@ -76,7 +78,7 @@ public class Arcane {
         arcane.playGame();
         String winner = arcane.announceWinner();
         logger.info(winner);
-//        removeAllObservers();
+        removeAllObservers();
 
 
     }
@@ -125,7 +127,6 @@ public class Arcane {
         eventBus.attach(new Observer(), EventType.ADVENTURER_ATE);
         eventBus.attach(new Observer(), EventType.TURN_ENDED);
         eventBus.attach(new Observer(), EventType.GAME_OVER);
-        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(this, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 4);
 
     }
     public void removeAllObservers(){

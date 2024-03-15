@@ -26,19 +26,18 @@ public class Game implements IMazeSubject, IObserver{
         this.adventurers = maze.getAdventurers();
         this.creatures = maze.getCreatures();
         this.observers = new ArrayList<>();
-    }
+//        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(this, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 4);
 
+    }
     @Override
     public void attach(IMazeObserver observer) {
         observers.add(observer);
     }
-
     public void notifyObservers(String statusMessage) {
         for (IMazeObserver observer : observers) {
             observer.update(getMaze(), statusMessage);
         }
     }
-
     public IMaze getMaze() {
         return new MazeAdapter(maze);
     }

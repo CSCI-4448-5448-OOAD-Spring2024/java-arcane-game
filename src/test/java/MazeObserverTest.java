@@ -12,6 +12,8 @@ public class MazeObserverTest {
     public void testRunGame3X3MapWithObservers() {
 
         Arcane arcane = new Arcane();
+        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(arcane, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 4);
+
         Maze maze = new Maze.Builder()
                 .create3x3Maze()
                 .addAdventurer("Arthur", 5.0)
@@ -28,11 +30,8 @@ public class MazeObserverTest {
                 .build();
 
         Game game = new Game(maze);
-        AudibleArcaneObserver audibleObserver = new AudibleArcaneObserver(arcane, List.of(EventType.ADVENTURER_KILLED, EventType.CREATURE_KILLED, EventType.ADVENTURER_ATE, EventType.TURN_ENDED, EventType.GAME_OVER), 4);
-
         IMazeObserver observer = createObserver("3x3 Game Display");
         game.attach(observer);
-
 
         logger.info("Starting play...");
         logger.info("Map Size: 3x3");
