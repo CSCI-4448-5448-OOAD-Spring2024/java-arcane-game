@@ -1,8 +1,4 @@
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
@@ -17,6 +13,7 @@ public class GameTest {
                 .initializeAdventurerCreaturePositions(2)
                 .build();
 
+//        EventBus eventBus = EventBus.getInstance();
         Game testGame = new Game(maze);
         assertFalse(testGame.isGameOver());
         assertEquals(0, testGame.getNumberOfTurns());
