@@ -1,4 +1,4 @@
-# Homework5 ARCANE-Adding the Observer, Adaptor, and Singleton Patterns and BDD
+# ARCANE-Adding the Observer, Adaptor, and Singleton Patterns and BDD
 
 Team Members:
 
